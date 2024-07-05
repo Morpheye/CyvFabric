@@ -60,9 +60,8 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
         //bg
         GuiUtils.drawRoundedRect(context, this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.shade1 : CyvFabric.theme.shade2);
 
-
         this.field.setY(this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll);
-        this.field.render(context, mouseX, mouseY, MinecraftClient.getInstance().getTickDelta());
+        this.field.render(context, mouseX, mouseY, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
     }
 
     @Override

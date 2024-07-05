@@ -14,6 +14,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.render.RenderTickCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class HUDManager {
 
     }
 
-    private static void render(DrawContext context, float partialTicks) {
+    private static void render(DrawContext context, RenderTickCounter partialTicks) {
         if (mc.options.hudHidden) return;
         if (mc.currentScreen == null || mc.currentScreen instanceof GenericContainerScreen ||
                 mc.currentScreen instanceof ChatScreen || mc.currentScreen instanceof GuiModConfig
@@ -61,7 +62,7 @@ public class HUDManager {
         }
     }
 
-    private static void callRenderer(DraggableHUDElement renderer, DrawContext context, float partialTicks) {
+    private static void callRenderer(DraggableHUDElement renderer, DrawContext context, RenderTickCounter partialTicks) {
         if (!renderer.isEnabled) return;
         if (!renderer.isVisible) return;
 

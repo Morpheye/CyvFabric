@@ -25,10 +25,10 @@ public class GuiUtils extends Screen {
         float j = (float)ColorHelper.Argb.getBlue(color) / 255.0f;
 
         VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(layer);
-        vertexConsumer.vertex(matrix4f, x, y, 0).color(g, h, j, f).next();
-        vertexConsumer.vertex(matrix4f, x, y2, 0).color(g, h, j, f).next();
-        vertexConsumer.vertex(matrix4f, x2, y2, 0).color(g, h, j, f).next();
-        vertexConsumer.vertex(matrix4f, x2, y, 0).color(g, h, j, f).next();
+        vertexConsumer.vertex(matrix4f, x, y, 0).color(g, h, j, f);
+        vertexConsumer.vertex(matrix4f, x, y2, 0).color(g, h, j, f);
+        vertexConsumer.vertex(matrix4f, x2, y2, 0).color(g, h, j, f);
+        vertexConsumer.vertex(matrix4f, x2, y, 0).color(g, h, j, f);
 
         context.draw();
     }
