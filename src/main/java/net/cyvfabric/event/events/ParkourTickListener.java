@@ -36,6 +36,8 @@ public class ParkourTickListener {
     public static float pf = 0, pp = 0; //preturn angles
 
     //inertia
+    public static double stored_vx = 0;
+    public static double stored_vz = 0;
     public static double stored_v = 0;
     public static float stored_slip = 1;
 
@@ -151,7 +153,8 @@ public class ParkourTickListener {
 
         //last 45
         if (lastTick.keys[0] && ((lastTick.keys[1] && lastTick.keys[3]) || (!lastTick.keys[1] && !lastTick.keys[3]))
-                && mcPlayer.input.movementSideways != 0 && mcPlayer.input.movementForward != 0 && !mcPlayer.isOnGround()) {
+                && mcPlayer.input.getMovementInput().x != 0 && mcPlayer.input.getMovementInput().y != 0
+                && !mcPlayer.isOnGround()) {
             last45 = f - lastTick.f;
         }
 
@@ -243,14 +246,15 @@ public class ParkourTickListener {
     private static void checkInertia() {
         if (!CyvClientConfig.getBoolean("inertiaEnabled", false)) return;
         int inertiaTick = CyvClientConfig.getInt("inertiaTick", 4);
-        char inertiaAxis = CyvClientConfig.getChar("inertiaAxis", 'x');
         String inertiaGroundType = CyvClientConfig.getString("inertiaGroundType", "normal");
         double inertiaMin = CyvClientConfig.getDouble("inertiaMin", -0.02);
         double inertiaMax = CyvClientConfig.getDouble("inertiaMax", 0.02);
 
         //check inertia
         if (airtime == inertiaTick) {
-            if (inertiaAxis == 'x') stored_v=vx; else stored_v=vz;
+            stored_vx=vx;
+            stored_vz=vz;
+            stored_v=Math.sqrt(vx*vx + vz*vz);
             if (airtime > 1) stored_slip = 1f;
             else if (inertiaGroundType.equals("ice")) stored_slip = 0.98f;
             else if (inertiaGroundType.equals("slime")) stored_slip = 0.8f;
@@ -268,10 +272,11 @@ public class ParkourTickListener {
 
             if ((stored_v>=min && stored_v<=max) || (stored_v<=min && stored_v>=max)) {
 
+                final String prevVelString = ", previous v = (" + df.format(stored_vx) + ", " + df.format(stored_vz) + ")";
                 if (Math.abs(stored_v)*0.91F*stored_slip < 0.003) {
-                    CyvFabric.sendChatMessage("Hit inertia at tick " + (airtime-1) + ", previous v = " + df.format(stored_v));
+                    CyvFabric.sendChatMessage("Hit inertia at tick " + (airtime-1) + prevVelString);
                 } else {
-                    CyvFabric.sendChatMessage("Missed inertia at tick " + (airtime-1) + ", previous v = " + df.format(stored_v));
+                    CyvFabric.sendChatMessage("Missed inertia at tick " + (airtime-1) + prevVelString);
                 }
 
             }
@@ -403,11 +408,13 @@ public class ParkourTickListener {
         }
 
         //sidestep
+        final float movementSideways = MinecraftClient.getInstance().player.input.getMovementInput().x;
         if (gameSettings.jumpKey.isPressed() && airtime == 0) {
-            if (((lastTick.strafe() != 0) && MinecraftClient.getInstance().player.input.movementSideways == 0)) {
+            if (((lastTick.strafe() != 0)
+                    && movementSideways == 0)) {
                 sidestepTime = 1;
                 sidestep = 0;
-            } else if (MinecraftClient.getInstance().player.input.movementSideways != 0) {
+            } else if (movementSideways != 0) {
                 sidestepTime = 1;
                 sidestep = 1;
             } else {
@@ -416,12 +423,12 @@ public class ParkourTickListener {
             }
 
         } else if (airtime > 0) {
-            if (sidestep == -1 && MinecraftClient.getInstance().player.input.movementSideways != 0) {
+            if (sidestep == -1 && movementSideways != 0) {
                 sidestep = 0;
                 sidestepTime = airtime;
             }
 
-            if (sidestepTime == airtime && MinecraftClient.getInstance().player.input.movementSideways == 0.0f
+            if (sidestepTime == airtime && movementSideways == 0
                     && sidestep == 0) {
                 sidestepTime++;
             }

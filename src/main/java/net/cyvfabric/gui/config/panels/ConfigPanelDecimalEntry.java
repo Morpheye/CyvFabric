@@ -62,7 +62,7 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
 
 
         this.field.setY(this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll);
-        this.field.render(context, mouseX, mouseY, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
+        this.field.render(context, mouseX, mouseY, MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(false));
     }
 
     @Override
