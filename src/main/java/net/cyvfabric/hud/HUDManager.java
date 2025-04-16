@@ -9,7 +9,8 @@ import net.cyvfabric.hud.nonlabels.KeystrokesHUD;
 import net.cyvfabric.hud.nonlabels.TogglesprintHUD;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -26,7 +27,7 @@ public class HUDManager {
     private static MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void init() { //initialize and create eventlistener
-        HudRenderCallback.EVENT.register(HUDManager::render);
+        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(IdentifiedLayer.CROSSHAIR, RenderLayers.LABELS_LAYER, HUDManager::render));
 
         registeredRenderers.add(new DirectionHUD());
         registeredRenderers.add(new TogglesprintHUD());

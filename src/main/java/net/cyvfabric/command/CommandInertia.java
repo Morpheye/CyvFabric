@@ -50,17 +50,6 @@ public class CommandInertia extends CyvCommand {
                 CyvFabric.sendChatMessage("Invalid maximum speed.");
             }
 
-        } else if (subcategory.equals("mode") || subcategory.equals("axis")) {
-            if (args[1].toLowerCase().equals("x")) {
-                CyvClientConfig.set("inertiaAxis", 'x');
-                CyvFabric.sendChatMessage("Inertia axis set to x.");
-            } else if (args[1].toLowerCase().equals("z")) {
-                CyvClientConfig.set("inertiaAxis", 'z');
-                CyvFabric.sendChatMessage("Inertia axis set to z.");
-            } else {
-                CyvFabric.sendChatMessage("Invalid axis. Only x and z are allowed.");
-            }
-
         } else if (subcategory.equals("tick") || subcategory.equals("t")) {
             try {
                 if (Integer.parseInt(args[1]) > 12 || Integer.parseInt(args[1]) < 1) {

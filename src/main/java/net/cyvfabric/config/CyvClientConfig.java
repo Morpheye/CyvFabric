@@ -35,7 +35,6 @@ public class CyvClientConfig {
         configFields.put("inertiaTick", new ConfigValue<Integer>(4));
         configFields.put("inertiaMin", new ConfigValue<Double>(-0.02));
         configFields.put("inertiaMax", new ConfigValue<Double>(0.02));
-        configFields.put("inertiaAxis", new ConfigValue<Character>('x'));
         configFields.put("inertiaGroundType", new ConfigValue<String>("normal"));
 
         //macros
@@ -75,6 +74,7 @@ public class CyvClientConfig {
             }
         }
 
+        @SuppressWarnings("unchecked")
         public void set(Object value) {
             try {
                 this.value = (T) (value);

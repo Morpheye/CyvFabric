@@ -3,8 +3,9 @@ package net.cyvfabric.event.events;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.command.mpk.CommandMacro;
 import net.cyvfabric.config.CyvClientConfig;
+import net.cyvfabric.hud.RenderLayers;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.GameOptions;
@@ -24,8 +25,7 @@ public class MacroListener {
 
     public static void register() {
         ClientTickEvents.START_CLIENT_TICK.register(MacroListener::onTick);
-        HudRenderCallback.EVENT.register(MacroListener::onRender);
-
+        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(RenderLayers.LABELS_LAYER, RenderLayers.MACRO_LAYER, MacroListener::onRender));
     }
 
     public static void onRender(DrawContext context, RenderTickCounter partialTicks) {
@@ -35,7 +35,7 @@ public class MacroListener {
         PlayerEntity mcPlayer = mc.player;
         GameOptions options = mc.options;
 
-        float renderTickTime = partialTicks.getTickDelta(false);
+        float renderTickTime = partialTicks.getTickProgress(false);
 
         if (CommandMacro.macroRunning > 1) {
             try {
