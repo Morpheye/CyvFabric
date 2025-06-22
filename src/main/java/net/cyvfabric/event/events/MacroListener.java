@@ -5,7 +5,7 @@ import net.cyvfabric.command.mpk.CommandMacro;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.hud.RenderLayers;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.GameOptions;
@@ -25,7 +25,8 @@ public class MacroListener {
 
     public static void register() {
         ClientTickEvents.START_CLIENT_TICK.register(MacroListener::onTick);
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(RenderLayers.LABELS_LAYER, RenderLayers.MACRO_LAYER, MacroListener::onRender));
+//        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(RenderLayers.LABELS_LAYER, RenderLayers.MACRO_LAYER, MacroListener::onRender));
+        HudElementRegistry.addLast(RenderLayers.MACRO_LAYER, MacroListener::onRender);
     }
 
     public static void onRender(DrawContext context, RenderTickCounter partialTicks) {
