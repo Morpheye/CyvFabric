@@ -25,7 +25,6 @@ public class MacroListener {
 
     public static void register() {
         ClientTickEvents.START_CLIENT_TICK.register(MacroListener::onTick);
-//        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(RenderLayers.LABELS_LAYER, RenderLayers.MACRO_LAYER, MacroListener::onRender));
         HudElementRegistry.addLast(RenderLayers.MACRO_LAYER, MacroListener::onRender);
     }
 

@@ -26,7 +26,6 @@ public class HUDManager {
     private static MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void init() { //initialize and create eventlistener
-//        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(IdentifiedLayer.CROSSHAIR, RenderLayers.LABELS_LAYER, HUDManager::render));
         HudElementRegistry.addLast(RenderLayers.LABELS_LAYER, HUDManager::render);
 
         registeredRenderers.add(new DirectionHUD());
