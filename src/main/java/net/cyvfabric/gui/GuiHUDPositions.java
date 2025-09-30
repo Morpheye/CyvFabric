@@ -47,7 +47,7 @@ public class GuiHUDPositions extends CyvGui {
     public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
         this.renderInGameBackground(context);
 
-        context.drawBorder(0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
+        GuiUtils.drawBorder(context, 0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 
         for (DraggableHUDElement renderer : renderers.keySet()) {
             ScreenPosition pos = renderers.get(renderer);
@@ -58,7 +58,7 @@ public class GuiHUDPositions extends CyvGui {
             int color = ((Long) CyvClientColorHelper.color1.drawColor).intValue();
             if (!renderer.isVisible) color = 0xFFAAAAAA;
 
-            context.drawBorder(pos.getAbsoluteX(), pos.getAbsoluteY(),
+            GuiUtils.drawBorder(context, pos.getAbsoluteX(), pos.getAbsoluteY(),
                     renderer.getWidth(), renderer.getHeight(), color);
         }
 
