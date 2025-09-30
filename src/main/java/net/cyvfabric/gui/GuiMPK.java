@@ -8,8 +8,11 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
@@ -59,8 +62,8 @@ public class GuiMPK extends CyvGui {
                 75,
                 mc.textRenderer.fontHeight, Text.empty()) {
             @Override
-            public boolean charTyped(char p_146201_1_, int p_146201_2_) {
-                if (super.charTyped(p_146201_1_, p_146201_2_)) {
+            public boolean charTyped(CharInput input) {
+                if (super.charTyped(input)) {
                     updateLabels(true);
                     return true;
                 } else {
@@ -73,17 +76,17 @@ public class GuiMPK extends CyvGui {
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode) {
+    public boolean charTyped(CharInput input) {
         {
             if (!this.searchBar.isFocused()) this.searchBar.setFocused(true);
-            this.searchBar.charTyped(typedChar, keyCode);
+            this.searchBar.charTyped(input);
         }
         return true;
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
+    public boolean keyPressed(KeyInput input) {
+        if (input.getKeycode() == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
             if (this.searchBar.isFocused()) {
                 this.searchBar.setFocused(false);
                 this.searchBar.setText("");
@@ -91,7 +94,7 @@ public class GuiMPK extends CyvGui {
                 return true;
             } else this.close();
         } else {
-            this.searchBar.keyPressed(keyCode, scanCode, modifiers);
+            this.searchBar.keyPressed(input);
             updateLabels(true);
         }
         return true;
@@ -229,26 +232,26 @@ public class GuiMPK extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
 
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
-                mouseY > amount && mouseY < amount+scrollbarHeight) {
+        if (click.x() > sr.getScaledWidth()/2+sizeX/2+2 && click.x() < sr.getScaledWidth()/2+sizeX/2+8 &&
+                click.y() > amount && click.y() < amount+scrollbarHeight) {
             this.scrollClicked = true;
             return true;
         } else {
             this.scrollClicked = false;
         }
 
-        if (this.button.clicked(mouseX, mouseY, mouseButton)) {
+        if (this.button.clicked(click)) {
             mc.setScreen(new GuiHUDPositions(true));
             return true;
         }
 
-        if (this.searchBar.mouseClicked(mouseX, mouseY, mouseButton)) {
+        if (this.searchBar.mouseClicked(click, doubled)) {
             this.searchBar.setFocused(true);
             updateLabels(true);
             return true;
@@ -257,32 +260,31 @@ public class GuiMPK extends CyvGui {
             updateLabels(true);
         }
 
-        if (mouseX < sr.getScaledWidth()/2-this.sizeX/2 || mouseX > sr.getScaledWidth()/2+this.sizeX/2
-                || mouseY < sr.getScaledHeight()/2-this.sizeY/2 || mouseY > sr.getScaledHeight()/2+this.sizeY/2) {
+        if (click.x() < sr.getScaledWidth()/2-this.sizeX/2 || click.x() > sr.getScaledWidth()/2+this.sizeX/2
+                || click.y() < sr.getScaledHeight()/2-this.sizeY/2 || click.y() > sr.getScaledHeight()/2+this.sizeY/2) {
             return false;
         }
 
         int index=0;
         for (LabelLine l : labelLines) {
-            if (l.isPressed(index, (int) mouseX, (int) mouseY, mouseButton)) {
-                l.mouseClicked(index, (int) mouseX, (int) mouseY, mouseButton);
+            if (l.isPressed(index, click)) {
+                l.mouseClicked(index, click);
                 return true;
             }
             index++;
         }
 
         return false;
-
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (this.scrollClicked) {
             int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
             int top = sr.getScaledHeight()/2-sizeY/2+4+15;
             int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
 
-            scroll = (int) ((float) (mouseY - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
+            scroll = (int) ((float) (click.y() - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
 
             if (scroll > maxScroll) scroll = maxScroll;
             if (scroll < 0) scroll = 0;
@@ -291,7 +293,6 @@ public class GuiMPK extends CyvGui {
         }
 
         return false;
-
     }
 
     @Override
@@ -301,7 +302,6 @@ public class GuiMPK extends CyvGui {
         //smooth scrolling
         this.scroll += this.vScroll;
         this.vScroll *= 0.75;
-
     }
 
     @Override
@@ -330,19 +330,18 @@ public class GuiMPK extends CyvGui {
 
         }
 
-        public boolean isPressed(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
+        public boolean isPressed(int slotIndex, Click click) {
             float yHeight = (slotIndex + 1) * textRenderer.fontHeight*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            if (mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height) {
+            if (click.x() > xStart && click.x() < xStart + width && click.y() > yHeight && click.y() < yHeight + height) {
                 return true;
             }
 
             return false;
         }
 
-        public void mouseClicked(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
+        public void mouseClicked(int slotIndex, Click click) {
             label.setEnabled(!label.isEnabled);
         }
-
     }
 
     class SubButton {
@@ -364,11 +363,9 @@ public class GuiMPK extends CyvGui {
             context.drawCenteredTextWithShadow(textRenderer, this.text, x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
         }
 
-        boolean clicked(double mouseX, double mouseY, int mouseButton) {
-            if (!(mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mouseButton == 0)) return false;
+        boolean clicked(Click click) {
+            if (!(click.x() > x && click.x() < x+sizeX && click.y() > y && click.y() < y+sizeY && click.button() == 0)) return false;
             else return true;
         }
-
     }
-
 }

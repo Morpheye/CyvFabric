@@ -1,15 +1,9 @@
 package net.cyvfabric.util;
 
-import net.cyvfabric.CyvFabric;
-import net.minecraft.block.StonecutterBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.item.*;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class CyvGui extends Screen {
     private Screen parent; //parent screen
@@ -31,25 +25,8 @@ public class CyvGui extends Screen {
 
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    @Override //called when the mouse is scrolled
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
     @Override //called upon GUI closing
     public void close() {
         MinecraftClient.getInstance().setScreen(parent); //sets screen to parent, or closes
     }
-
-
 }

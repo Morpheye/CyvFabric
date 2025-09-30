@@ -6,8 +6,11 @@ import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -77,10 +80,10 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        this.field.mouseClicked(mouseX, mouseY, mouseButton);
+    public void mouseClicked(Click click, boolean doubled) {
+        this.field.mouseClicked(click, doubled);
 
-        if (!(mouseX >= field.getX() && mouseX <= field.getX() + field.getWidth() && mouseY >= field.getY() && mouseY <= field.getY() + field.getHeight())) {
+        if (!(click.x() >= field.getX() && click.x() <= field.getX() + field.getWidth() && click.y() >= field.getY() && click.y() <= field.getY() + field.getHeight())) {
             this.unselect();
         } else {
             this.select();
@@ -89,14 +92,13 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
 
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {
-        this.field.charTyped(typedChar, keyCode);
-
+    public void charTyped(CharInput input) {
+        this.field.charTyped(input);
     }
 
     @Override
-    public void keyPressed(int keyCode, int scanCode, int modifiers) {
-        this.field.keyPressed(keyCode, scanCode, modifiers);
+    public void keyPressed(KeyInput input) {
+        this.field.keyPressed(input);
     }
 
     @Override
@@ -107,10 +109,6 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
             this.field.setText(val+"");
             CyvClientConfig.set(this.configOption, val);
         } catch (Exception e) {}
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override

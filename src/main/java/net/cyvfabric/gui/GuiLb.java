@@ -5,6 +5,7 @@ import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -132,15 +133,15 @@ public class GuiLb extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        landingModeButton.mouseClicked(mouseX, mouseY, button);
-        axisButton.mouseClicked(mouseX, mouseY, button);
-        calculateWalls.mouseClicked(mouseX, mouseY, button);
-        resetWalls.mouseClicked(mouseX, mouseY, button);
-        bbToggle.mouseClicked(mouseX, mouseY, button);
-        condToggle.mouseClicked(mouseX, mouseY, button);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        landingModeButton.mouseClicked(click, doubled);
+        axisButton.mouseClicked(click, doubled);
+        calculateWalls.mouseClicked(click, doubled);
+        resetWalls.mouseClicked(click, doubled);
+        bbToggle.mouseClicked(click, doubled);
+        condToggle.mouseClicked(click, doubled);
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override

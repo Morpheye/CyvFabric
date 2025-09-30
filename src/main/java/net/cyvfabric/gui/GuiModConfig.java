@@ -9,7 +9,10 @@ import net.cyvfabric.gui.config.panels.*;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
 
@@ -164,13 +167,13 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (this.scrollClicked) {
             int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
             int top = sr.getScaledHeight()/2-sizeY/2+4;
             int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
 
-            scroll = (int) ((float) (mouseY - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
+            scroll = (int) ((float) (click.y() - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
 
             if (scroll > maxScroll) scroll = maxScroll;
             if (scroll < 0) scroll = 0;
@@ -179,12 +182,11 @@ public class GuiModConfig extends CyvGui {
         }
 
         if (this.selectedPanel != null) {
-            this.selectedPanel.mouseDragged(mouseX, mouseY);
+            this.selectedPanel.mouseDragged(click.x(), click.y());
             return true;
         }
 
         return false;
-
     }
 
     @Override
@@ -212,36 +214,36 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
 
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
-                mouseY > amount && mouseY < amount+scrollbarHeight) {
+        if (click.x() > sr.getScaledWidth()/2+sizeX/2+2 && click.x() < sr.getScaledWidth()/2+sizeX/2+8 &&
+                click.y() > amount && click.y() < amount+scrollbarHeight) {
             this.scrollClicked = true;
             return true;
         } else {
             this.scrollClicked = false;
         }
 
-        if (this.backButton.clicked(mouseX, mouseY, mouseButton)) {
+        if (this.backButton.clicked(click)) {
             this.close();
             return true;
         }
 
-        if (mouseX < sr.getScaledWidth()/2-sizeX/2-4 || mouseX > sr.getScaledWidth()/2+sizeX/2+14 ||
-                mouseY < sr.getScaledHeight()/2-sizeY/2-4 || mouseY > sr.getScaledHeight()/2+sizeY/2+4) {
+        if (click.x() < sr.getScaledWidth()/2-sizeX/2-4 || click.x() > sr.getScaledWidth()/2+sizeX/2+14 ||
+                click.y() < sr.getScaledHeight()/2-sizeY/2-4 || click.y() > sr.getScaledHeight()/2+sizeY/2+4) {
             this.selectedPanel = null;
             return true;
         }
 
         for (ConfigPanel p : this.panels) {
-            if (p.mouseInBounds(mouseX, mouseY+(int)scroll)) {
+            if (p.mouseInBounds(click.x(), click.y()+(int)scroll)) {
                 if (this.selectedPanel != null) this.selectedPanel.unselect();
 
-                p.mouseClicked(mouseX, mouseY+(int)scroll, mouseButton);
+                p.mouseClicked(new Click(click.x(), click.y()+(int)scroll, click.buttonInfo()), doubled);
                 this.selectedPanel = p;
                 p.select();
                 return true;
@@ -253,14 +255,14 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
+    public boolean charTyped(CharInput input) {
+        if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
             this.close();
             return true;
         }
 
         if (this.selectedPanel != null) {
-            this.selectedPanel.keyTyped(typedChar, keyCode);
+            this.selectedPanel.charTyped(input);
             return true;
         }
 
@@ -268,8 +270,8 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean keyPressed(KeyInput input) {
+        if (input.getKeycode() == GLFW.GLFW_KEY_ESCAPE) {
             if (this.selectedPanel != null) {
                 this.selectedPanel.unselect();
                 this.selectedPanel = null;
@@ -279,7 +281,7 @@ public class GuiModConfig extends CyvGui {
         }
 
         if (this.selectedPanel != null) {
-            this.selectedPanel.keyPressed(keyCode, scanCode, modifiers);
+            this.selectedPanel.keyPressed(input);
             return true;
         }
 
@@ -290,7 +292,6 @@ public class GuiModConfig extends CyvGui {
     public void removed() {
         for (ConfigPanel p : this.panels) p.save();
         this.updatePanels();
-
     }
 
     class SubButton {
@@ -311,8 +312,8 @@ public class GuiModConfig extends CyvGui {
             context.drawCenteredTextWithShadow(textRenderer, this.text, x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
         }
 
-        boolean clicked(double mouseX, double mouseY, int mouseButton) {
-            if (!(mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mouseButton == 0)) return false;
+        boolean clicked(Click click) {
+            if (!(click.x() > x && click.x() < x+sizeX && click.y() > y && click.y() < y+sizeY && click.button() == 0)) return false;
             else return true;
         }
 

@@ -7,7 +7,9 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.client.util.Window;
 
 public class ConfigPanelEmptySpace implements ConfigPanel {
@@ -45,11 +47,10 @@ public class ConfigPanelEmptySpace implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {}
-
+    public void mouseClicked(Click click, boolean doubled) {}
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {}
+    public void charTyped(CharInput input) {}
 
     @Override
     public void save() {}

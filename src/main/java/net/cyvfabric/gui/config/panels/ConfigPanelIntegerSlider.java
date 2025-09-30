@@ -6,7 +6,9 @@ import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.math.MathHelper;
 
@@ -72,14 +74,14 @@ public class ConfigPanelIntegerSlider implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public void mouseClicked(Click click, boolean doubled) {
         // TODO Auto-generated method stub
 
     }
 
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {
+    public void charTyped(CharInput input) {
         // TODO Auto-generated method stub
 
     }
