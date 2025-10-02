@@ -48,8 +48,6 @@ public class HUDManager {
     }
 
     private static void render(DrawContext context, RenderTickCounter partialTicks) {
-        if (mc.options.hudHidden) return;
-
         if (CommandMacro.macroRunning > 0) { //macrorunning
             Window sr = mc.getWindow();
             context.drawText(mc.textRenderer, "MACRO",
@@ -65,7 +63,7 @@ public class HUDManager {
                 if (mc.currentScreen instanceof ChatScreen && !renderer.renderInChat()) continue;
 
                 GameOptions gameSettings = mc.options;
-                if (mc.inGameHud.getDebugHud().shouldShowDebugHud() && !renderer.renderInOverlay()) continue;
+                if (mc.debugHudEntryList.isF3Enabled() && !renderer.renderInOverlay()) continue;
 
                 callRenderer(renderer, context, partialTicks);
             }

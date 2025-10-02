@@ -6,8 +6,11 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.IRenderer;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.CyvGui;
+import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
 
@@ -47,7 +50,7 @@ public class GuiHUDPositions extends CyvGui {
     public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
         this.renderInGameBackground(context);
 
-        context.drawBorder(0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
+        GuiUtils.drawBorder(context, 0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 
         for (DraggableHUDElement renderer : renderers.keySet()) {
             ScreenPosition pos = renderers.get(renderer);
@@ -58,15 +61,15 @@ public class GuiHUDPositions extends CyvGui {
             int color = ((Long) CyvClientColorHelper.color1.drawColor).intValue();
             if (!renderer.isVisible) color = 0xFFAAAAAA;
 
-            context.drawBorder(pos.getAbsoluteX(), pos.getAbsoluteY(),
+            GuiUtils.drawBorder(context, pos.getAbsoluteX(), pos.getAbsoluteY(),
                     renderer.getWidth(), renderer.getHeight(), color);
         }
 
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean charTyped(CharInput input) {
+        if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) {
             renderers.entrySet().forEach((entry) -> {
                 entry.getKey().save(entry.getValue());
             });
@@ -74,28 +77,28 @@ public class GuiHUDPositions extends CyvGui {
             if (fromLabels) MinecraftClient.getInstance().setScreen(new GuiMPK());
             else this.close();
             return true;
-        } else if (keyCode == GLFW.GLFW_KEY_UP) {
+        } else if (input.codepoint() == GLFW.GLFW_KEY_UP) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(0,-1);
                     return true;
                 }
             }
-        } else if (keyCode == GLFW.GLFW_KEY_LEFT) {
+        } else if (input.codepoint() == GLFW.GLFW_KEY_LEFT) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(-1,0);
                     return true;
                 }
             }
-        } else if (keyCode == GLFW.GLFW_KEY_DOWN) {
+        } else if (input.codepoint() == GLFW.GLFW_KEY_DOWN) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(0,1);
                     return true;
                 }
             }
-        } else if (keyCode == GLFW.GLFW_KEY_RIGHT) {
+        } else if (input.codepoint() == GLFW.GLFW_KEY_RIGHT) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(1,0);
@@ -108,12 +111,12 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (button == 0) { //left-clicked
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+        if (click.button() == 0) { //left-clicked
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
-                    prevX += deltaX;
-                    prevY += deltaY;
+                    prevX += offsetX;
+                    prevY += offsetY;
                     moveSelectedRenderBy((int) prevX, (int) prevY);
                     prevX -= (int) prevX;
                     prevY -= (int) prevY;
@@ -126,20 +129,16 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(double x, double y, int mouseButton) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         this.prevX = 0;
         this.prevY = 0;
 
-        loadMouseOver((int) x, (int) y);
+        loadMouseOver((int) click.x(), (int) click.y());
 
-        if (mouseButton == 1) { //right-clicked
+        if (click.button() == 1) { //right-clicked
             if (!this.selectedRenderer.isPresent()) return false;
             DraggableHUDElement modRender = this.selectedRenderer.get();
-            if (modRender.isVisible) {
-                modRender.isVisible = false;
-            } else {
-                modRender.isVisible = true;
-            }
+            modRender.isVisible = !modRender.isVisible;
 
             return true;
         }

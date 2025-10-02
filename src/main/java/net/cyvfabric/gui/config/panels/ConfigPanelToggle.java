@@ -7,7 +7,9 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.client.util.Window;
 
 public class ConfigPanelToggle implements ConfigPanel {
@@ -65,16 +67,15 @@ public class ConfigPanelToggle implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public void mouseClicked(Click click, boolean doubled) {
         this.sliderValue = !this.sliderValue;
         CyvClientConfig.set(this.configOption, this.sliderValue);
         onValueChange();
-
     }
 
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {
+    public void charTyped(CharInput input) {
         // TODO Auto-generated method stub
 
     }

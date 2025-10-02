@@ -6,9 +6,12 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
@@ -63,16 +66,16 @@ public class GuiSimulate extends CyvGui {
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
-        input.charTyped(chr, modifiers);
-        return super.charTyped(chr, modifiers);
+    public boolean charTyped(CharInput charInput) {
+        this.input.charTyped(charInput);
+        return super.charTyped(charInput);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ENTER) {
+    public boolean keyPressed(KeyInput keyInput) {
+        if (keyInput.getKeycode() == GLFW.GLFW_KEY_ENTER) {
             this.close(); //close the gui
-            String text = input.getText(); //parser shit
+            String text = this.input.getText(); //parser shit
 
             if (text.equals("") || text.equals(" ")) {}
             else {
@@ -88,35 +91,35 @@ public class GuiSimulate extends CyvGui {
                 return true;
             }
             return true;
-        } else if (keyCode == GLFW.GLFW_KEY_UP) { //scroll up
+        } else if (keyInput.getKeycode() == GLFW.GLFW_KEY_UP) { //scroll up
             if (chatHistoryIndex < chatHistory.size()) {
                 chatHistoryIndex++;
-                input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
+                this.input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
                 return true;
             }
 
-        } else if (keyCode == GLFW.GLFW_KEY_DOWN) { //scroll down
+        } else if (keyInput.getKeycode() == GLFW.GLFW_KEY_DOWN) { //scroll down
             if (chatHistoryIndex > 0) {
                 chatHistoryIndex--;
                 if (chatHistoryIndex == 0) {
-                    input.setText("");
+                    this.input.setText("");
                 } else {
-                    input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
+                    this.input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
                 }
                 return true;
             }
 
         }
 
-        input.keyPressed(keyCode, scanCode, modifiers);
+        this.input.keyPressed(keyInput);
 
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(keyInput);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        input.mouseClicked(mouseX, mouseY, mouseButton);
-        if (button.mouseClicked(mouseX, mouseY, mouseButton)) {
+    public boolean mouseClicked(Click click, boolean doubled) {
+        input.mouseClicked(click, doubled);
+        if (button.mouseClicked(click, doubled)) {
             this.close();
             String text = input.getText(); //parser shit
 
@@ -132,7 +135,7 @@ public class GuiSimulate extends CyvGui {
                 output(text);
 
             }}
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        return super.mouseClicked(click, doubled);
     }
 
     private void output(String text) {

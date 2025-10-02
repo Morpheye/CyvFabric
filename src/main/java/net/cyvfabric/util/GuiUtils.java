@@ -14,4 +14,12 @@ public class GuiUtils extends Screen {
         context.fill(x, y, x2, y2, color);
     }
 
+    public static void drawBorder(DrawContext context, int x, int y, int width, int height, int color) {
+        int x2 = x + width - 1;
+        int y2 = y + height - 1;
+        context.drawHorizontalLine(x, x2, y, color);
+        context.drawHorizontalLine(x, x2, y2, color);
+        context.drawVerticalLine(x, y, y2, color);
+        context.drawVerticalLine(x2, y, y2, color);
+    }
 }

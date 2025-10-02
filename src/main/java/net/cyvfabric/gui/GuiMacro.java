@@ -10,8 +10,11 @@ import net.cyvfabric.event.MacroFileInit;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 
@@ -208,23 +211,23 @@ public class GuiMacro extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseEvent) {
-        super.mouseClicked(mouseX, mouseY, mouseEvent);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        super.mouseClicked(click, doubled);
 
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
 
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
-                mouseY > amount && mouseY < amount+scrollbarHeight) {
+        if (click.x() > sr.getScaledWidth()/2+sizeX/2+2 && click.x() < sr.getScaledWidth()/2+sizeX/2+8 &&
+                click.y() > amount && click.y() < amount+scrollbarHeight) {
             this.scrollClicked = true;
             return true;
         } else {
             this.scrollClicked = false;
         }
 
-        if (this.fileName.mouseClicked(mouseX, mouseY, mouseEvent)) {
+        if (this.fileName.mouseClicked(click, doubled)) {
             this.fileName.setFocused(true);
             if (this.selectedIndex > -1 && macroLines.get(selectedIndex) != null) {
                 macroLines.get(selectedIndex).yawField.setFocused(false);
@@ -235,37 +238,36 @@ public class GuiMacro extends CyvGui {
 
         int index=0;
         for (MacroLine l : macroLines) {
-            if (l.isPressed(index, mouseX, mouseY, mouseEvent)) {
+            if (l.isPressed(index, click.x(), click.y(), click.button())) {
 
                 if (this.selectedIndex == index) {
                     if (!l.pitchField.isFocused() && !l.yawField.isFocused()) {
-                        if (mc.options.forwardKey.matchesMouse(mouseEvent)) {
+                        if (mc.options.forwardKey.matchesMouse(click)) {
                             l.w = !l.w;
-                        } else if (mc.options.leftKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.leftKey.matchesMouse(click)) {
                             l.a = !l.a;
-                        } else if (mc.options.backKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.backKey.matchesMouse(click)) {
                             l.s = !l.s;
-                        } else if (mc.options.rightKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.rightKey.matchesMouse(click)) {
                             l.d = !l.d;
-                        } else if (mc.options.jumpKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.jumpKey.matchesMouse(click)) {
                             l.jump = !l.jump;
-                        } else if (mc.options.sprintKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.sprintKey.matchesMouse(click)) {
                             l.sprint = !l.sprint;
-                        } else if (mc.options.sneakKey.matchesMouse(mouseEvent)) {
+                        } else if (mc.options.sneakKey.matchesMouse(click)) {
                             l.sneak = !l.sneak;
                         }
                     }
                 } else {
                     this.selectedIndex = index;
-
                 }
-                l.mouseClicked(index, mouseX, mouseY, mouseEvent);
+                l.mouseClicked(index, click, doubled);
                 return true;
             }
             index++;
         }
 
-        if (this.addRow.clicked(mouseX, mouseY, mouseEvent)) {
+        if (this.addRow.clicked(click)) {
             try {
                 if (!(this.selectedIndex > -1 && this.selectedIndex < this.macroLines.size())) {
                     this.macroLines.add(new MacroLine());
@@ -277,7 +279,7 @@ public class GuiMacro extends CyvGui {
                 }
                 return true;
             } catch (Exception e) {e.printStackTrace();}
-        } else if (this.duplicateRow.clicked(mouseX, mouseY, mouseEvent)) {
+        } else if (this.duplicateRow.clicked(click)) {
             try {
                 MacroLine oldLine = this.macroLines.get(this.selectedIndex);
                 MacroLine newLine = new MacroLine();
@@ -296,27 +298,26 @@ public class GuiMacro extends CyvGui {
                 this.macroLines.add(selectedIndex, newLine);
                 return true;
             } catch (Exception e) {}
-        } else if (this.deleteRow.clicked(mouseX, mouseY, mouseEvent)) {
+        } else if (this.deleteRow.clicked(click)) {
             try {
                 this.macroLines.remove(selectedIndex);
             } catch (Exception e) {}
-        } else if (this.loadFile.clicked(mouseX, mouseY, mouseEvent)) {
+        } else if (this.loadFile.clicked(click)) {
             CyvClientConfig.set("currentMacro", this.fileName.getText());
             mc.setScreen(new GuiMacro());
         }
 
         return false;
-
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (this.scrollClicked) {
             int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
             int top = sr.getScaledHeight()/2-sizeY/2+4;
             int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
 
-            scroll = (int) ((float) (mouseY - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
+            scroll = (int) ((float) (click.y() - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) / (bottom - top) * maxScroll);
 
             if (scroll > maxScroll) scroll = maxScroll;
             if (scroll < 0) scroll = 0;
@@ -325,13 +326,12 @@ public class GuiMacro extends CyvGui {
         }
 
         return false;
-
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
+    public boolean charTyped(CharInput input) {
         if (this.fileName.isFocused()) {
-            this.fileName.charTyped(chr, modifiers);
+            this.fileName.charTyped(input);
             return true;
         }
 
@@ -339,11 +339,11 @@ public class GuiMacro extends CyvGui {
             MacroLine l = this.macroLines.get(this.selectedIndex);
 
             if (l.yawField.isFocused()) {
-                l.yawField.charTyped(chr, modifiers);
+                l.yawField.charTyped(input);
                 return true;
             }
             else if (l.pitchField.isFocused()) {
-                l.pitchField.charTyped(chr, modifiers);
+                l.pitchField.charTyped(input);
                 return true;
             }
         }
@@ -352,41 +352,40 @@ public class GuiMacro extends CyvGui {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        super.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(KeyInput input) {
+        super.keyPressed(input);
 
         if (this.fileName.isFocused()) {
-            this.fileName.keyPressed(keyCode, scanCode, modifiers);
+            this.fileName.keyPressed(input);
             return true;
         }
 
         if (this.selectedIndex > -1 && this.selectedIndex < macroLines.size()) {
             MacroLine l = this.macroLines.get(this.selectedIndex);
             if (l.yawField.isFocused()) {
-                l.yawField.keyPressed(keyCode, scanCode, modifiers);
+                l.yawField.keyPressed(input);
                 return true;
             }
             else if (l.pitchField.isFocused()) {
-                l.pitchField.keyPressed(keyCode, scanCode, modifiers);
+                l.pitchField.keyPressed(input);
                 return true;
             }
 
-            if (mc.options.forwardKey.matchesKey(keyCode, keyCode)) {
+            if (mc.options.forwardKey.matchesKey(input)) {
                 l.w = !l.w;
-            } else if (mc.options.leftKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.leftKey.matchesKey(input)) {
                 l.a = !l.a;
-            } else if (mc.options.backKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.backKey.matchesKey(input)) {
                 l.s = !l.s;
-            } else if (mc.options.rightKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.rightKey.matchesKey(input)) {
                 l.d = !l.d;
-            } else if (mc.options.jumpKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.jumpKey.matchesKey(input)) {
                 l.jump = !l.jump;
-            } else if (mc.options.sprintKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.sprintKey.matchesKey(input)) {
                 l.sprint = !l.sprint;
-            } else if (mc.options.sneakKey.matchesKey(keyCode, keyCode)) {
+            } else if (mc.options.sneakKey.matchesKey(input)) {
                 l.sneak = !l.sneak;
             }
-
         }
 
         return false;
@@ -530,17 +529,15 @@ public class GuiMacro extends CyvGui {
             return false;
         }
 
-        public void mouseClicked(int slotIndex, double mouseX, double mouseY, int mouseEvent) {
+        public void mouseClicked(int slotIndex, Click click, boolean doubled) {
             float yHeight = (slotIndex + 1) * height - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            if (!(mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height)) {
+            if (!(click.x() > xStart && click.x() < xStart + width && click.y() > yHeight && click.y() < yHeight + height)) {
                 return;
             }
 
-            this.yawField.setFocused(this.yawField.mouseClicked(mouseX, mouseY, mouseEvent));
-            this.pitchField.setFocused(this.pitchField.mouseClicked(mouseX, mouseY, mouseEvent));
-
+            this.yawField.setFocused(this.yawField.mouseClicked(click, doubled));
+            this.pitchField.setFocused(this.pitchField.mouseClicked(click, doubled));
         }
-
     }
 
     class SubButton {
@@ -563,10 +560,9 @@ public class GuiMacro extends CyvGui {
             context.drawCenteredTextWithShadow(textRenderer, this.text, x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
         }
 
-        boolean clicked(double mouseX, double mouseY, int mouseButton) {
+        boolean clicked(Click click) {
             if (!this.enabled) return false;
-            return mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY && mouseButton == 0;
+            return click.x() > x && click.x() < x + sizeX && click.y() > y && click.y() < y + sizeY && click.button() == 0;
         }
-
     }
 }

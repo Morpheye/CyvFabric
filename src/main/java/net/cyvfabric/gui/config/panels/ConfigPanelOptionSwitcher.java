@@ -7,7 +7,9 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
 import net.minecraft.client.util.Window;
 
 public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
@@ -74,9 +76,9 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (mouseButton == 0) this.sliderValue++;
-        else if (mouseButton == 1) this.sliderValue--;
+    public void mouseClicked(Click click, boolean doubled) {
+        if (click.button() == 0) this.sliderValue++;
+        else if (click.button() == 1) this.sliderValue--;
         if (this.sliderValue >= this.sliderValues.length) this.sliderValue = 0;
         if (this.sliderValue < 0) this.sliderValue = this.sliderValues.length-1;
 
@@ -87,7 +89,7 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
 
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {
+    public void charTyped(CharInput input) {
         // TODO Auto-generated method stub
 
     }
