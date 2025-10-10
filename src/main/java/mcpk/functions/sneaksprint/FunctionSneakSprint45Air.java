@@ -1,12 +1,11 @@
 package mcpk.functions.sneaksprint;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import mcpk.Player;
 import mcpk.functions.Function;
-import mcpk.functions.Function.InvalidKeypressException;
 import mcpk.utils.Arguments;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FunctionSneakSprint45Air extends Function {
 

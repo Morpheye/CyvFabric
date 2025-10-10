@@ -2,7 +2,6 @@ package net.cyvfabric.util;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.ArrayList;
 

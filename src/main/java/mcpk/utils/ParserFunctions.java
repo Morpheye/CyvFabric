@@ -1,8 +1,5 @@
 package mcpk.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import mcpk.functions.Function;
 import mcpk.functions.nonmovement.SpecialFunction;
 import mcpk.functions.nonmovement.globals.FunctionSlip;
@@ -13,41 +10,16 @@ import mcpk.functions.nonmovement.position.FunctionPosX;
 import mcpk.functions.nonmovement.position.FunctionPosZ;
 import mcpk.functions.nonmovement.velocity.FunctionVx;
 import mcpk.functions.nonmovement.velocity.FunctionVz;
-import mcpk.functions.sneak.FunctionSneak;
-import mcpk.functions.sneak.FunctionSneak45;
-import mcpk.functions.sneak.FunctionSneak45Air;
-import mcpk.functions.sneak.FunctionSneakAir;
-import mcpk.functions.sneak.FunctionSneakJump;
-import mcpk.functions.sneak.FunctionSneakJump45;
-import mcpk.functions.sneaksprint.FunctionLSneakSprintJump;
-import mcpk.functions.sneaksprint.FunctionLSneakSprintJump45;
-import mcpk.functions.sneaksprint.FunctionRSneakSprintJump;
-import mcpk.functions.sneaksprint.FunctionRSneakSprintJump45;
-import mcpk.functions.sneaksprint.FunctionSneakSprint;
-import mcpk.functions.sneaksprint.FunctionSneakSprint45;
-import mcpk.functions.sneaksprint.FunctionSneakSprint45Air;
-import mcpk.functions.sneaksprint.FunctionSneakSprintAir;
-import mcpk.functions.sneaksprint.FunctionSneakSprintJump;
-import mcpk.functions.sneaksprint.FunctionSneakSprintJump45;
-import mcpk.functions.sprint.FunctionLSprintJump;
-import mcpk.functions.sprint.FunctionLSprintJump45;
-import mcpk.functions.sprint.FunctionRSprintJump;
-import mcpk.functions.sprint.FunctionRSprintJump45;
-import mcpk.functions.sprint.FunctionSprint;
-import mcpk.functions.sprint.FunctionSprint45;
-import mcpk.functions.sprint.FunctionSprint45Air;
-import mcpk.functions.sprint.FunctionSprintAir;
-import mcpk.functions.sprint.FunctionSprintJump;
-import mcpk.functions.sprint.FunctionSprintJump45;
+import mcpk.functions.sneak.*;
+import mcpk.functions.sneaksprint.*;
+import mcpk.functions.sprint.*;
 import mcpk.functions.stop.FunctionStop;
 import mcpk.functions.stop.FunctionStopAir;
 import mcpk.functions.stop.FunctionStopJump;
-import mcpk.functions.walk.FunctionWalk;
-import mcpk.functions.walk.FunctionWalk45;
-import mcpk.functions.walk.FunctionWalk45Air;
-import mcpk.functions.walk.FunctionWalkAir;
-import mcpk.functions.walk.FunctionWalkJump;
-import mcpk.functions.walk.FunctionWalkJump45;
+import mcpk.functions.walk.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ParserFunctions {
 	public static ArrayList<Function> functionInit() {

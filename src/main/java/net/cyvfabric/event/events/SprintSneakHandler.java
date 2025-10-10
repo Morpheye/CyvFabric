@@ -1,4 +1,4 @@
-package net.cyvfabric.event;
+package net.cyvfabric.event.events;
 
 import net.cyvfabric.keybinding.KeybindingTogglesprint;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

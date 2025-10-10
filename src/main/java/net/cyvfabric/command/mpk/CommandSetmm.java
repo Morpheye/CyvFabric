@@ -2,7 +2,7 @@ package net.cyvfabric.command.mpk;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.event.ParkourTickListener;
+import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.util.CyvCommand;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;

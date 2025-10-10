@@ -1,7 +1,7 @@
 package net.cyvfabric.command;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.cyvfabric.event.GuiHandler;
+import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

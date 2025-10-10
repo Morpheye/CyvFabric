@@ -1,11 +1,11 @@
 package mcpk.functions.walk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import mcpk.Player;
 import mcpk.functions.Function;
 import mcpk.utils.Arguments;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FunctionWalkJump45 extends Function {
 

@@ -1,7 +1,5 @@
 package net.cyvfabric.keybinding;
 
-import net.cyvfabric.event.GuiHandler;
-import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvKeybinding;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;

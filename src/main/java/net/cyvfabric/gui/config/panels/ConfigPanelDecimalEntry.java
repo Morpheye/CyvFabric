@@ -12,8 +12,6 @@ import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
-import java.awt.*;
-
 public class ConfigPanelDecimalEntry implements ConfigPanel {
     public TextFieldWidget field;
     public String configOption;

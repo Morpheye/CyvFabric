@@ -7,7 +7,6 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.ColorHelper;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
 
 public class GuiUtils extends Screen {
     protected GuiUtils() {

@@ -2,7 +2,7 @@ package net.cyvfabric.util.parkour;
 
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
-import net.cyvfabric.event.ParkourTickListener;
+import net.cyvfabric.event.events.ParkourTickListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.Box;
 

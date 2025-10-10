@@ -2,12 +2,9 @@ package net.cyvfabric.command.mpk;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.event.ParkourTickListener;
+import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.util.CyvCommand;
-import net.cyvfabric.util.parkour.LandingBlock;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.Box;
 
 public class CommandSetcond extends CyvCommand {
     public CommandSetcond() {

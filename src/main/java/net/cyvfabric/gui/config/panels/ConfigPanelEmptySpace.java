@@ -1,12 +1,8 @@
 package net.cyvfabric.gui.config.panels;
 
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
-import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
 

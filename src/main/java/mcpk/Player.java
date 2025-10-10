@@ -1,10 +1,10 @@
 package mcpk;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
 import mcpk.utils.Arguments;
 import mcpk.utils.MathHelper;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class Player {
 	

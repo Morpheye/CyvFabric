@@ -1,11 +1,11 @@
 package mcpk.functions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import mcpk.Player;
 import mcpk.utils.Arguments;
 import mcpk.utils.ParserException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Function {
 	

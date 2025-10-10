@@ -1,6 +1,11 @@
 package net.cyvfabric;
 
-import net.cyvfabric.event.*;
+import net.cyvfabric.event.CommandInitializer;
+import net.cyvfabric.event.ConfigLoader;
+import net.cyvfabric.event.events.GuiHandler;
+import net.cyvfabric.event.events.KeyInputHandler;
+import net.cyvfabric.event.events.ParkourTickListener;
+import net.cyvfabric.event.events.SprintSneakHandler;
 import net.cyvfabric.hud.HUDManager;
 import net.fabricmc.api.ClientModInitializer;
 

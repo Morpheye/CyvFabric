@@ -1,15 +1,9 @@
 package net.cyvfabric.util;
 
-import net.cyvfabric.CyvFabric;
-import net.minecraft.block.StonecutterBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.item.*;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class CyvGui extends Screen {
     private Screen parent; //parent screen

@@ -1,14 +1,12 @@
 package mcpk.functions.nonmovement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import mcpk.Parser;
 import mcpk.Player;
 import mcpk.functions.Function;
-import mcpk.functions.Function.DurationException;
-import mcpk.functions.Function.InvalidKeypressException;
 import mcpk.utils.ParserException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class SpecialFunction extends Function {
 	

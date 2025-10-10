@@ -1,15 +1,12 @@
 package net.cyvfabric.hud.nonlabels;
 
 import net.cyvfabric.config.CyvClientColorHelper;
-import net.cyvfabric.event.ParkourTickListener;
+import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.Window;
 
 import java.awt.*;
 import java.util.ArrayList;

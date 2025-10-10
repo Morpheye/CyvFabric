@@ -1,12 +1,10 @@
 package net.cyvfabric.command.calculations;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.event.GuiHandler;
+import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandSimulate extends CyvCommand {
     public CommandSimulate() {

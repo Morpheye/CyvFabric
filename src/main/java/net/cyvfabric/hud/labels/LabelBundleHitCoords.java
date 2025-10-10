@@ -3,7 +3,7 @@ package net.cyvfabric.hud.labels;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
-import net.cyvfabric.event.ParkourTickListener;
+import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;

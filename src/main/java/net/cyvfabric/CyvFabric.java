@@ -3,10 +3,7 @@ package net.cyvfabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
-import net.cyvfabric.util.ChatFormattingString;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;

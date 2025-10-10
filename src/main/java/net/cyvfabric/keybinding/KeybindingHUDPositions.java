@@ -1,6 +1,6 @@
 package net.cyvfabric.keybinding;
 
-import net.cyvfabric.event.GuiHandler;
+import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiHUDPositions;
 import net.cyvfabric.util.CyvKeybinding;
 import org.lwjgl.glfw.GLFW;

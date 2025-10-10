@@ -1,4 +1,4 @@
-package net.cyvfabric.event;
+package net.cyvfabric.event.events;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;

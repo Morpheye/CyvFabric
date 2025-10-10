@@ -1,13 +1,13 @@
 package mcpk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-
 import mcpk.functions.Function;
 import mcpk.functions.nonmovement.SpecialFunction;
 import mcpk.utils.ParserException;
 import mcpk.utils.ParserFunctions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class Parser {
 	

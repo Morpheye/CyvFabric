@@ -3,7 +3,6 @@ package net.cyvfabric.hud.nonlabels;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
-import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.keybinding.KeybindingTogglesprint;

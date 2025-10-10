@@ -1,6 +1,5 @@
 package net.cyvfabric.util.parkour;
 
-import net.cyvfabric.CyvFabric;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LadderBlock;
@@ -12,7 +11,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LandingBlock {
 
