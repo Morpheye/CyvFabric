@@ -59,6 +59,7 @@ public class ParkourTickListener {
     //Timings
     private static int lastJumpTime = -1;
     private static int lastGroundMoveTime = -1;
+    private static int lastSidewayMoveTime = -1;
     private static int lastMoveTime = -1;
     private static int lastSprintTime = -1;
     private static int lastSneakTime = -2;
@@ -283,10 +284,14 @@ public class ParkourTickListener {
         boolean showMS = /*ModManager.getMod(ModMPKMod.class).showMilliseconds;*/false;
         GameOptions gameSettings = MinecraftClient.getInstance().options;
 
-        if (gameSettings.forwardKey.isPressed() || //ANYTHING IS PRESSED
-                gameSettings.backKey.isPressed() ||
-                gameSettings.leftKey.isPressed() ||
-                gameSettings.rightKey.isPressed()) {
+        boolean movingWS = gameSettings.forwardKey.isPressed() ^ gameSettings.backKey.isPressed();
+        boolean movingAD = gameSettings.leftKey.isPressed() ^ gameSettings.rightKey.isPressed();
+        boolean moving = movingWS || movingAD;
+
+        if (movingAD && !movingWS)
+            lastSidewayMoveTime++;
+
+        if (moving) {
             lastMoveTime++;
             lastGroundMoveTime++;
             hasActed = true;
@@ -300,20 +305,32 @@ public class ParkourTickListener {
                 if (gameSettings.keyBindRight.isKeyDown() && (gameSettings.keyBindRight.lastPressTime > earliestMoveTimestamp)) earliestMoveTimestamp = gameSettings.keyBindRight.lastPressTime;
 
             }
-            
+
              */
 
-            //already jumped, started moving
-            if (lastJumpTime > -1 && lastMoveTime == 0 && airtime != 0 && !(vy == 0 && lastTick.onGround)
-                    && (lastTiming.contains("Pessi") || !locked)) {
-                if ((lastJumpTime+1) == 1) lastTiming = "Max Pessi";
-                else lastTiming = "Pessi " + (lastJumpTime+1) + " ticks";
-                locked = true;
+            if (lastJumpTime > -1 && airtime != 0 && !(vy == 0 && lastTick.onGround)) {  // already jumped
+                // started moving midair
+                if (lastMoveTime == 0 &&
+                        (lastTiming.contains("Pessi") || !locked)) {
+                    if ((lastJumpTime + 1) == 1) lastTiming = "Max Pessi";
+                    else lastTiming = "Pessi " + (lastJumpTime + 1) + " ticks";
+                    locked = true;
 
-                /*
-                if (showMS && Math.abs((earliestMoveTimestamp - gameSettings.keyBindJump.lastPressTime) / 1000000) < 10000)
-                    lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
-                */
+                    /*
+                    if (showMS && Math.abs((earliestMoveTimestamp - gameSettings.keyBindJump.lastPressTime) / 1000000) < 10000)
+                        lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
+                    */
+                }
+                // has held strafe since beginning of jump and starts moving forward/backward
+                if (lastSidewayMoveTime >= lastJumpTime && movingWS && movingAD) {
+                    lastTiming = "Mark " + (lastJumpTime + 1) + " tick" + (lastJumpTime > 0 ? "s" : "");
+                    locked = true;
+
+                    /*
+                    if (showMS && Math.abs((earliestMoveTimestamp - gameSettings.keyBindJump.lastPressTime) / 1000000) < 10000)
+                        lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
+                    */
+                }
             }
 
             if (lastTick.onGround && !secondLastTick.onGround) { //landed
@@ -324,6 +341,8 @@ public class ParkourTickListener {
             lastMoveTime = -1;
             lastGroundMoveTime = -1;
         }
+        if (!movingAD || movingWS)
+            lastSidewayMoveTime = -1;
 
         //jumping
         if (gameSettings.jumpKey.isPressed() && airtime == 0) {
@@ -345,7 +364,7 @@ public class ParkourTickListener {
             } else if (lastGroundMoveTime > -1 && !locked && lastJumpTime == 0) {
                 if (lastSneakTime == -1) lastTiming = "Burst " + (lastGroundMoveTime) + " ticks";
                 else if (lastSneakTime > -1) lastTiming = "Burstjam " + (lastGroundMoveTime) + " ticks";
-                else lastTiming = "HH " + (lastGroundMoveTime) + " ticks";
+                else lastTiming = "HH " + (lastGroundMoveTime) + " tick" + (lastGroundMoveTime > 1 ? "s" : "");
 
                 /*
                 if (showMS && Math.abs((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) < 10000)
@@ -393,21 +412,18 @@ public class ParkourTickListener {
         }
 
         //reset
-        if (!(gameSettings.forwardKey.isPressed() || //ANYTHING IS PRESSED
-                gameSettings.backKey.isPressed() ||
-                gameSettings.leftKey.isPressed() ||
-                gameSettings.rightKey.isPressed() ||
-                gameSettings.jumpKey.isPressed()) &&
+        if (!(moving || gameSettings.jumpKey.isPressed()) &&
                 MinecraftClient.getInstance().player.isOnGround()) {
             resetLastTiming();
         }
 
         //sidestep
         if (gameSettings.jumpKey.isPressed() && airtime == 0) {
-            if (((lastTick.strafe() != 0) && MinecraftClient.getInstance().player.input.movementSideways == 0)) {
+            if (((lastTick.strafe() != 0)
+                    && !movingAD)) {
                 sidestepTime = 1;
                 sidestep = 0;
-            } else if (MinecraftClient.getInstance().player.input.movementSideways != 0) {
+            } else if (movingAD) {
                 sidestepTime = 1;
                 sidestep = 1;
             } else {
@@ -416,12 +432,12 @@ public class ParkourTickListener {
             }
 
         } else if (airtime > 0) {
-            if (sidestep == -1 && MinecraftClient.getInstance().player.input.movementSideways != 0) {
+            if (sidestep == -1 && movingAD) {
                 sidestep = 0;
                 sidestepTime = airtime;
             }
 
-            if (sidestepTime == airtime && MinecraftClient.getInstance().player.input.movementSideways == 0.0f
+            if (sidestepTime == airtime && !movingAD
                     && sidestep == 0) {
                 sidestepTime++;
             }
@@ -431,6 +447,7 @@ public class ParkourTickListener {
         //overflow prevention
         if (lastJumpTime > 999) lastJumpTime = 999;
         if (lastGroundMoveTime > 999) lastGroundMoveTime = 999;
+        if (lastSidewayMoveTime > 999) lastSidewayMoveTime = 999;
         if (lastMoveTime > 999) lastMoveTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
     }
