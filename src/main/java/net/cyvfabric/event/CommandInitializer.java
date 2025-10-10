@@ -39,6 +39,8 @@ public class CommandInitializer  {
                 new CommandAirtime(), new CommandCalculate(), new CommandDistance(), new CommandHeight(),
                 new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity(), new CommandSimulate()
         }));
+
+        cyvCommands.add(new CommandMacro());
     }
 
     @SuppressWarnings({"unchecked"})

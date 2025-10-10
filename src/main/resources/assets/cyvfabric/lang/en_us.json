@@ -2,5 +2,7 @@
   "key.category.cyvfabric": "CyvFabric Keys",
   "key.cyvfabric.openhudpositions": "Open HUD Position GUI",
   "key.cyvfabric.openmpkgui": "Open MPK GUI",
-  "key.cyvfabric.togglesprint": "Toggle Sprint"
+  "key.cyvfabric.togglesprint": "Toggle Sprint",
+  "key.cyvfabric.runmacro": "Run Macro",
+  "key.cyvfabric.stopmacro": "Stop Macro"
 }

@@ -22,7 +22,7 @@ public class GuiMPK extends CyvGui {
     int sizeX = 100;
     int sizeY = 200;
 
-    public ArrayList<LabelLine> labelLines;
+    public ArrayList<LabelLine> labelLines = new ArrayList<LabelLine>();
     int selectedIndex = -1;
 
     float vScroll = 0;
@@ -44,9 +44,6 @@ public class GuiMPK extends CyvGui {
 
     @Override
     public void init() { //initialize the macro
-        ArrayList<ArrayList<String>> macro;
-        this.labelLines = new ArrayList<LabelLine>();
-
         this.sizeX = 100;
         this.sizeY = sr.getScaledHeight()*3/4;
 

@@ -31,7 +31,7 @@ public class CyvFabric implements ModInitializer {
 			String chatColor2 = CyvClientConfig.getBoolean("whiteChat", false) ? CyvClientColorHelper.colors.get(12).chatColor
 					: CyvClientColorHelper.color2.chatColor;
 			MinecraftClient.getInstance().player.sendMessage(Text.of(
-				CyvClientColorHelper.color1.chatColor + "<Cyv> " + chatColor2 + text.toString()));
+				CyvClientColorHelper.color1.chatColor + "<Cyv> " + chatColor2 + text.toString()), false);
 		} catch (Exception e) {
 			LOGGER.error(e.toString());
 		}

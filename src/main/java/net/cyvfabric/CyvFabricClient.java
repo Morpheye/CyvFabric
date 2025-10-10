@@ -2,10 +2,7 @@ package net.cyvfabric;
 
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.event.ConfigLoader;
-import net.cyvfabric.event.events.GuiHandler;
-import net.cyvfabric.event.events.KeyInputHandler;
-import net.cyvfabric.event.events.ParkourTickListener;
-import net.cyvfabric.event.events.SprintSneakHandler;
+import net.cyvfabric.event.events.*;
 import net.cyvfabric.hud.HUDManager;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -22,6 +19,7 @@ public class CyvFabricClient implements ClientModInitializer {
         GuiHandler.register(); //register gui listener
 
         ParkourTickListener.register();
+        MacroListener.register();
         SprintSneakHandler.register();
 
         CyvFabric.LOGGER.info("CyvFabric client initialized!");

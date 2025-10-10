@@ -1,5 +1,6 @@
 package net.cyvfabric.hud;
 
+import net.cyvfabric.command.mpk.CommandMacro;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.hud.labels.*;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.util.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,14 @@ public class HUDManager {
 
     private static void render(DrawContext context, RenderTickCounter partialTicks) {
         if (mc.options.hudHidden) return;
+
+        if (CommandMacro.macroRunning > 0) { //macrorunning
+            Window sr = mc.getWindow();
+            context.drawText(mc.textRenderer, "MACRO",
+                    sr.getScaledWidth()/2 - mc.textRenderer.getWidth("MACRO") / 2,
+                    sr.getScaledHeight()/5, 0xFFFF0000, false);
+        }
+
         if (mc.currentScreen == null || mc.currentScreen instanceof GenericContainerScreen ||
                 mc.currentScreen instanceof ChatScreen || mc.currentScreen instanceof GuiModConfig
                 || mc.currentScreen instanceof GuiMPK) {

@@ -108,7 +108,7 @@ public class ParkourTickListener {
         }
 
         if (airtime == 1) { //jump tick
-            if (mcPlayer.input.jumping && vy >= 0) {
+            if (mcPlayer.getVelocity().y > 0 && vy >= 0) {
                 jx = x;
                 jy = y;
                 jz = z;

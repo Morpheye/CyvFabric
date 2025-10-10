@@ -1,8 +1,6 @@
 package net.cyvfabric.event.events;
 
-import net.cyvfabric.keybinding.KeybindingHUDPositions;
-import net.cyvfabric.keybinding.KeybindingMPKGui;
-import net.cyvfabric.keybinding.KeybindingTogglesprint;
+import net.cyvfabric.keybinding.*;
 import net.cyvfabric.util.CyvKeybinding;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -19,6 +17,8 @@ public class KeyInputHandler {
         cyvKeybindings.add(new KeybindingHUDPositions());
         cyvKeybindings.add(new KeybindingMPKGui());
         cyvKeybindings.add(new KeybindingTogglesprint());
+        cyvKeybindings.add(new KeybindingRunMacro());
+        cyvKeybindings.add(new KeybindingStopMacro());
 
         for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
             KeyBindingHelper.registerKeyBinding(k);

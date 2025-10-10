@@ -155,6 +155,10 @@ public class GuiModConfig extends CyvGui {
         panels.add(new ConfigPanelOptionSwitcher<Character>(18, "inertiaAxis", "Inertia Axis", new Character[] {'x', 'z'}, this));
         panels.add(new ConfigPanelOptionSwitcher<String>(19, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
 
+        //macro
+        panels.add(new ConfigPanelEmptySpace(20, this));
+        panels.add(new ConfigPanelToggle(21, "smoothMacro", "Smooth Macro", this));
+
         maxScroll = (int) Math.max(0, MinecraftClient.getInstance().textRenderer.fontHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
