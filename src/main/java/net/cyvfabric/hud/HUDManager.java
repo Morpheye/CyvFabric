@@ -61,8 +61,7 @@ public class HUDManager {
                 if (mc.screen instanceof ContainerScreen && !renderer.renderInGui()) continue;
                 if (mc.screen instanceof ChatScreen && !renderer.renderInChat()) continue;
 
-                Options gameSettings = mc.options;
-                if (mc.debugEntries.isF3Visible() && !renderer.renderInOverlay()) continue;
+                if (mc.debugEntries.isOverlayVisible() && !renderer.renderInOverlay()) continue;
 
                 callRenderer(renderer, context, partialTicks);
             }
