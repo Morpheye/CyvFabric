@@ -1,6 +1,6 @@
 package net.cyvfabric.hud.structure;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 
 public interface IRenderer {
     int getWidth();
@@ -10,9 +10,9 @@ public interface IRenderer {
 
     public ScreenPosition load();
 
-    void render(DrawContext context, ScreenPosition pos);
+    void render(GuiGraphics context, ScreenPosition pos);
 
-    default void renderDummy(DrawContext context, ScreenPosition pos) {
+    default void renderDummy(GuiGraphics context, ScreenPosition pos) {
         render(context, pos);
     }
 

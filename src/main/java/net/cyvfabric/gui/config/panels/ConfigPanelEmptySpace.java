@@ -1,16 +1,15 @@
 package net.cyvfabric.gui.config.panels;
 
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 
 public class ConfigPanelEmptySpace implements ConfigPanel {
     public final int index;
@@ -25,16 +24,16 @@ public class ConfigPanelEmptySpace implements ConfigPanel {
         this.index = index;
         this.screenIn = screenIn;
 
-        Window sr = MinecraftClient.getInstance().getWindow();
+        Window sr = Minecraft.getInstance().getWindow();
         sizeX = screenIn.sizeX - 20;
-        sizeY = MinecraftClient.getInstance().textRenderer.fontHeight * 3 / 2;
-        this.xPosition = sr.getScaledWidth() / 2 - screenIn.sizeX / 2 + 10;
-        this.yPosition = sr.getScaledHeight() / 2 - screenIn.sizeY / 2 + 10 + (index * MinecraftClient.getInstance().textRenderer.fontHeight * 2);
+        sizeY = Minecraft.getInstance().font.lineHeight * 3 / 2;
+        this.xPosition = sr.getGuiScaledWidth() / 2 - screenIn.sizeX / 2 + 10;
+        this.yPosition = sr.getGuiScaledHeight() / 2 - screenIn.sizeY / 2 + 10 + (index * Minecraft.getInstance().font.lineHeight * 2);
 
     }
 
     @Override
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll) {}
+    public void draw(GuiGraphics context, int mouseX, int mouseY, int scroll) {}
 
     @Override
     public void mouseDragged(double mouseX, double mouseY) {}
@@ -47,10 +46,10 @@ public class ConfigPanelEmptySpace implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(Click click, boolean doubled) {}
+    public void mouseClicked(MouseButtonEvent click, boolean doubled) {}
 
     @Override
-    public void charTyped(CharInput input) {}
+    public void charTyped(CharacterEvent input) {}
 
     @Override
     public void save() {}

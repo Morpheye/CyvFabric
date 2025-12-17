@@ -6,10 +6,9 @@ import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingBlockOffset;
 import net.cyvfabric.util.parkour.LandingMode;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.GameOptions;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.player.LocalPlayer;
 import java.text.DecimalFormat;
 
 public class ParkourTickListener {
@@ -76,9 +75,9 @@ public class ParkourTickListener {
     }
 
     //end of tick
-    private static void onTick(MinecraftClient mc) {
-        ClientPlayerEntity mcPlayer = mc.player;
-        GameOptions gameSettings = mc.options;
+    private static void onTick(Minecraft mc) {
+        LocalPlayer mcPlayer = mc.player;
+        Options gameSettings = mc.options;
 
         if (mcPlayer == null) return;
 
@@ -86,19 +85,19 @@ public class ParkourTickListener {
             hasCollided = true;
         }
 
-        if (mc.world == null || mc.isPaused()) return;
+        if (mc.level == null || mc.isPaused()) return;
 
         calculateLastTiming();
 
         if (lastTick == null) {
         } else {
-            if ((!lastTick.onGround || !mcPlayer.isOnGround()) && !mcPlayer.getAbilities().flying) airtime++;
+            if ((!lastTick.onGround || !mcPlayer.onGround()) && !mcPlayer.getAbilities().flying) airtime++;
 
             x = mcPlayer.getX();
             y = mcPlayer.getY();
             z = mcPlayer.getZ();
-            f = mcPlayer.getYaw(); //note: actual yaw and pitch are delayed by a tick
-            p = mcPlayer.getPitch();
+            f = mcPlayer.getYRot(); //note: actual yaw and pitch are delayed by a tick
+            p = mcPlayer.getXRot();
 
             vx = x - lastTick.x;
             vy = y - lastTick.y;
@@ -111,7 +110,7 @@ public class ParkourTickListener {
         }
 
         if (airtime == 1) { //jump tick
-            if (mcPlayer.getVelocity().y > 0 && vy >= 0) {
+            if (mcPlayer.getDeltaMovement().y > 0 && vy >= 0) {
                 jx = x;
                 jy = y;
                 jz = z;
@@ -154,8 +153,8 @@ public class ParkourTickListener {
 
         //last 45
         if (lastTick.keys[0] && ((lastTick.keys[1] && lastTick.keys[3]) || (!lastTick.keys[1] && !lastTick.keys[3]))
-                && mcPlayer.input.getMovementInput().x != 0 && mcPlayer.input.getMovementInput().y != 0
-                && !mcPlayer.isOnGround()) {
+                && mcPlayer.input.getMoveVector().x != 0 && mcPlayer.input.getMoveVector().y != 0
+                && !mcPlayer.onGround()) {
             last45 = f - lastTick.f;
         }
 
@@ -163,7 +162,7 @@ public class ParkourTickListener {
         if (f != lastTick.f) lastTurning = f - lastTick.f;
 
         //hit tick
-        if (lastTick != null && mcPlayer.isOnGround() && !lastTick.onGround && vy < 0) {
+        if (lastTick != null && mcPlayer.onGround() && !lastTick.onGround && vy < 0) {
             lx = lastTick.x;
             ly = lastTick.y;
             lz = lastTick.z;
@@ -224,17 +223,17 @@ public class ParkourTickListener {
             LandingBlockOffset.finalizePb(momentumBlock);
         }
 
-        boolean[] keys = new boolean[] {mc.options.forwardKey.isPressed(), mc.options.leftKey.isPressed(),
-                mc.options.backKey.isPressed(), mc.options.rightKey.isPressed(),
-                mc.options.jumpKey.isPressed(), mc.options.sprintKey.isPressed(),
-                mc.options.sneakKey.isPressed()};
+        boolean[] keys = new boolean[] {mc.options.keyUp.isDown(), mc.options.keyLeft.isDown(),
+                mc.options.keyDown.isDown(), mc.options.keyRight.isDown(),
+                mc.options.keyJump.isDown(), mc.options.keySprint.isDown(),
+                mc.options.keyShift.isDown()};
 
         thirdLastTick = secondLastTick;
         secondLastTick = lastTick;
         lastTick = new PosTick(mcPlayer, vx, vy, vz, airtime, keys);
-        lastTick.true_vx = mcPlayer.getVelocity().getX();
-        lastTick.true_vy = mcPlayer.getVelocity().getY();
-        lastTick.true_vz = mcPlayer.getVelocity().getZ();
+        lastTick.true_vx = mcPlayer.getDeltaMovement().x();
+        lastTick.true_vy = mcPlayer.getDeltaMovement().y();
+        lastTick.true_vz = mcPlayer.getDeltaMovement().z();
         lastTick.hasCollidedHorizontally = mcPlayer.horizontalCollision;
         if (lastTick.onGround) {
             if (airtime != 0) lastAirtime = airtime;
@@ -287,10 +286,10 @@ public class ParkourTickListener {
 
     private static void calculateLastTiming() {
         boolean showMS = /*ModManager.getMod(ModMPKMod.class).showMilliseconds;*/false;
-        GameOptions gameSettings = MinecraftClient.getInstance().options;
+        Options gameSettings = Minecraft.getInstance().options;
 
-        boolean movingWS = gameSettings.forwardKey.isPressed() ^ gameSettings.backKey.isPressed();
-        boolean movingAD = gameSettings.leftKey.isPressed() ^ gameSettings.rightKey.isPressed();
+        boolean movingWS = gameSettings.keyUp.isDown() ^ gameSettings.keyDown.isDown();
+        boolean movingAD = gameSettings.keyLeft.isDown() ^ gameSettings.keyRight.isDown();
         boolean moving = movingWS || movingAD;
 
         if (movingAD && !movingWS)
@@ -350,7 +349,7 @@ public class ParkourTickListener {
             lastSidewayMoveTime = -1;
 
         //jumping
-        if (gameSettings.jumpKey.isPressed() && airtime == 0) {
+        if (gameSettings.keyJump.isDown() && airtime == 0) {
             lastJumpTime = 0;
             hasActed = true;
 
@@ -362,7 +361,7 @@ public class ParkourTickListener {
                     lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
                 }
                 */
-                if (gameSettings.sprintKey.isPressed() || !gameSettings.forwardKey.isPressed()) {
+                if (gameSettings.keySprint.isDown() || !gameSettings.keyUp.isDown()) {
                     locked = true;
                 }
                 //already moved on ground
@@ -387,7 +386,7 @@ public class ParkourTickListener {
         }
 
         //sneaking
-        if (gameSettings.sneakKey.isPressed()) {
+        if (gameSettings.keyShift.isDown()) {
             if (lastSneakTime == -2) lastSneakTime = 0;
             else lastSneakTime++;
         }
@@ -396,7 +395,7 @@ public class ParkourTickListener {
             else lastSneakTime = -1;
         }
 
-        if ((gameSettings.sprintKey.isPressed() || lastSprintTime != -1)
+        if ((gameSettings.keySprint.isDown() || lastSprintTime != -1)
                 && !lastTick.onGround ) {
             lastSprintTime++;
             if (lastTiming.startsWith("Jam") && lastSprintTime == 0 && !locked && lastTick.keys[0]) {
@@ -417,13 +416,13 @@ public class ParkourTickListener {
         }
 
         //reset
-        if (!(moving || gameSettings.jumpKey.isPressed()) &&
-                MinecraftClient.getInstance().player.isOnGround()) {
+        if (!(moving || gameSettings.keyJump.isDown()) &&
+                Minecraft.getInstance().player.onGround()) {
             resetLastTiming();
         }
 
         //sidestep
-        if (gameSettings.jumpKey.isPressed() && airtime == 0) {
+        if (gameSettings.keyJump.isDown() && airtime == 0) {
             if (((lastTick.strafe() != 0)
                     && !movingAD)) {
                 sidestepTime = 1;
@@ -466,17 +465,17 @@ public class ParkourTickListener {
 
     public static class PosTick {
 
-        public PosTick(ClientPlayerEntity player, double vx, double vy, double vz, int airtime, boolean[] keys) {
+        public PosTick(LocalPlayer player, double vx, double vy, double vz, int airtime, boolean[] keys) {
 
             this.x = player.getX();
             this.y = player.getY();
             this.z = player.getZ();
-            this.f = player.getYaw();
-            this.p = player.getPitch();
+            this.f = player.getYRot();
+            this.p = player.getXRot();
             this.vx = vx;
             this.vy = vy;
             this.vz = vz;
-            this.onGround = player.isOnGround();
+            this.onGround = player.onGround();
             this.airtime = airtime;
             this.keys = keys;
         }

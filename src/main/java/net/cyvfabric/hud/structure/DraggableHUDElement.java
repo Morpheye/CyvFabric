@@ -2,13 +2,12 @@ package net.cyvfabric.hud.structure;
 
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import java.util.LinkedHashMap;
 
 public abstract class DraggableHUDElement implements IRenderer {
-    protected final MinecraftClient mc;
+    protected final Minecraft mc;
 
     public ScreenPosition position;
     public boolean isVisible = true;
@@ -16,7 +15,7 @@ public abstract class DraggableHUDElement implements IRenderer {
     public boolean isEnabled = true;
 
     public DraggableHUDElement() {
-        this.mc = MinecraftClient.getInstance();
+        this.mc = Minecraft.getInstance();
 
         setEnabled(isEnabled);
         this.position = this.getDefaultPosition();
@@ -27,7 +26,7 @@ public abstract class DraggableHUDElement implements IRenderer {
     }
 
     private int getLineOffset(int lineNum) {
-        return (MinecraftClient.getInstance().textRenderer.fontHeight + 3) * lineNum;
+        return (Minecraft.getInstance().font.lineHeight + 3) * lineNum;
     }
 
     public abstract ScreenPosition getDefaultPosition();
@@ -88,13 +87,13 @@ public abstract class DraggableHUDElement implements IRenderer {
         return true;
     }
 
-    protected void drawString(DrawContext context, Object string, int x, int y, long color) {
+    protected void drawString(GuiGraphics context, Object string, int x, int y, long color) {
         this.drawString(context, string, x, y, color, true);
     }
 
-    protected void drawString(DrawContext context, Object string, int x, int y, long color, boolean shadow) {
+    protected void drawString(GuiGraphics context, Object string, int x, int y, long color, boolean shadow) {
         long drawColor = (this.isVisible) ? color : 0xFFAAAAAA;
-        context.drawText(mc.textRenderer, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
+        context.drawString(mc.font, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
     }
 
 }

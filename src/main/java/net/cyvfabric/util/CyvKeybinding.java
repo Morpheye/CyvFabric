@@ -1,18 +1,18 @@
 package net.cyvfabric.util;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.cyvfabric.CyvFabric;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
 
 /**CyvFabric custom keybinding*/
-public class CyvKeybinding extends KeyBinding {
-    public static final MinecraftClient client = MinecraftClient.getInstance();
-    public static final KeyBinding.Category KEY_CATEGORY_CYVFABRIC = KeyBinding.Category.create(Identifier.of(CyvFabric.MOD_ID, "cyv_keys")); //cyvfabric keybinding category
+public class CyvKeybinding extends KeyMapping {
+    public static final Minecraft client = Minecraft.getInstance();
+    public static final KeyMapping.Category KEY_CATEGORY_CYVFABRIC = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(CyvFabric.MOD_ID, "cyv_keys")); //cyvfabric keybinding category
 
     public CyvKeybinding(String name, int glfw_key) {
-        super(name, InputUtil.Type.KEYSYM, glfw_key, KEY_CATEGORY_CYVFABRIC);
+        super(name, InputConstants.Type.KEYSYM, glfw_key, KEY_CATEGORY_CYVFABRIC);
     }
 
     /**Called on start of tick*/

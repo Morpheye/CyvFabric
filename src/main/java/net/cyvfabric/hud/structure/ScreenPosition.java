@@ -1,10 +1,10 @@
 package net.cyvfabric.hud.structure;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Window;
+import com.mojang.blaze3d.platform.Window;
+import net.minecraft.client.Minecraft;
 
 public class ScreenPosition {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
     private int x, y;
 
     public ScreenPosition(double x, double y) {
@@ -32,17 +32,17 @@ public class ScreenPosition {
     }
 
     public double getRelativeX() {
-        return (double) this.x / mc.getWindow().getScaledWidth();
+        return (double) this.x / mc.getWindow().getGuiScaledWidth();
     }
 
     public double getRelativeY() {
-        return (double) this.y / mc.getWindow().getScaledHeight();
+        return (double) this.y / mc.getWindow().getGuiScaledHeight();
     }
 
     public void setRelative(double x, double y) {
         Window res = mc.getWindow();
-        this.x = (int) (x * res.getScaledWidth());
-        this.y = (int) (y * res.getScaledHeight());
+        this.x = (int) (x * res.getGuiScaledWidth());
+        this.y = (int) (y * res.getGuiScaledHeight());
     }
 
     public void setAbsolute(int x, int y) {

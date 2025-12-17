@@ -5,17 +5,16 @@ import mcpk.Player;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.client.util.Window;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
-
+import com.mojang.blaze3d.platform.Window;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -24,8 +23,8 @@ public class GuiSimulate extends CyvGui {
     public static ArrayList<String> chatHistory = new ArrayList<String>();
 
     public boolean repeatEventsEnabled;
-    TextFieldWidget input;
-    ButtonWidget button;
+    EditBox input;
+    Button button;
     int chatHistoryIndex = 0;
 
     public GuiSimulate() {
@@ -34,9 +33,9 @@ public class GuiSimulate extends CyvGui {
 
     @Override
     protected void init() {
-        input = new TextFieldWidget(textRenderer, width/2-width*23/80, (int) (height*0.40-10), width*23/40, 20, Text.empty());
-        button = ButtonWidget.builder(Text.of("Calculate"), (widget) -> {})
-                .position(width/2-50, height*3/5-10)
+        input = new EditBox(font, width/2-width*23/80, (int) (height*0.40-10), width*23/40, 20, Component.empty());
+        button = Button.builder(Component.nullToEmpty("Calculate"), (widget) -> {})
+                .pos(width/2-50, height*3/5-10)
                 .size(100, 20).build();
 
         input.setMaxLength(65536);
@@ -45,37 +44,37 @@ public class GuiSimulate extends CyvGui {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        Window sr = MinecraftClient.getInstance().getWindow();
-        int width = sr.getScaledWidth();
-        int height = sr.getScaledHeight();
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+        Window sr = Minecraft.getInstance().getWindow();
+        int width = sr.getGuiScaledWidth();
+        int height = sr.getGuiScaledHeight();
 
-        int x1 = (int) (sr.getScaledWidth() * 0.20);
-        int y1 = (int) (sr.getScaledHeight() * 0.30);
-        int x2 = (int) (sr.getScaledWidth() * 0.80);
-        int y2 = (int) (sr.getScaledHeight() * 0.50);
+        int x1 = (int) (sr.getGuiScaledWidth() * 0.20);
+        int y1 = (int) (sr.getGuiScaledHeight() * 0.30);
+        int x2 = (int) (sr.getGuiScaledWidth() * 0.80);
+        int y2 = (int) (sr.getGuiScaledHeight() * 0.50);
 
-        super.renderInGameBackground(context); //background tint
+        super.renderTransparentBackground(context); //background tint
         GuiUtils.drawRoundedRect(context, x1-2, y1-2, x2+2, y2+2, 9, 0x88000000);
         GuiUtils.drawRoundedRect(context, x1, y1, x2, y2, 7, 0x11000000);
 
         input.render(context, mouseX, mouseY, partialTicks);
         button.render(context, mouseX, mouseY, partialTicks);
 
-        context.drawCenteredTextWithShadow(textRenderer, "Movement Simulator", x1+46, y1-15, 0xFFFFFFFF);
+        context.drawCenteredString(font, "Movement Simulator", x1+46, y1-15, 0xFFFFFFFF);
     }
 
     @Override
-    public boolean charTyped(CharInput charInput) {
+    public boolean charTyped(CharacterEvent charInput) {
         this.input.charTyped(charInput);
         return super.charTyped(charInput);
     }
 
     @Override
-    public boolean keyPressed(KeyInput keyInput) {
-        if (keyInput.getKeycode() == GLFW.GLFW_KEY_ENTER) {
-            this.close(); //close the gui
-            String text = this.input.getText(); //parser shit
+    public boolean keyPressed(KeyEvent keyInput) {
+        if (keyInput.input() == GLFW.GLFW_KEY_ENTER) {
+            this.onClose(); //close the gui
+            String text = this.input.getValue(); //parser shit
 
             if (text.equals("") || text.equals(" ")) {}
             else {
@@ -91,20 +90,20 @@ public class GuiSimulate extends CyvGui {
                 return true;
             }
             return true;
-        } else if (keyInput.getKeycode() == GLFW.GLFW_KEY_UP) { //scroll up
+        } else if (keyInput.input() == GLFW.GLFW_KEY_UP) { //scroll up
             if (chatHistoryIndex < chatHistory.size()) {
                 chatHistoryIndex++;
-                this.input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
+                this.input.setValue(chatHistory.get(chatHistory.size()-chatHistoryIndex));
                 return true;
             }
 
-        } else if (keyInput.getKeycode() == GLFW.GLFW_KEY_DOWN) { //scroll down
+        } else if (keyInput.input() == GLFW.GLFW_KEY_DOWN) { //scroll down
             if (chatHistoryIndex > 0) {
                 chatHistoryIndex--;
                 if (chatHistoryIndex == 0) {
-                    this.input.setText("");
+                    this.input.setValue("");
                 } else {
-                    this.input.setText(chatHistory.get(chatHistory.size()-chatHistoryIndex));
+                    this.input.setValue(chatHistory.get(chatHistory.size()-chatHistoryIndex));
                 }
                 return true;
             }
@@ -117,11 +116,11 @@ public class GuiSimulate extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         input.mouseClicked(click, doubled);
         if (button.mouseClicked(click, doubled)) {
-            this.close();
-            String text = input.getText(); //parser shit
+            this.onClose();
+            String text = input.getValue(); //parser shit
 
             if (text.equals("") || text.equals(" ")) {}
             else {

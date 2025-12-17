@@ -5,20 +5,20 @@ import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 
 public class GuiLb extends CyvGui {
     LandingBlock lb;
-    ButtonWidget landingModeButton;
-    ButtonWidget axisButton;
-    ButtonWidget calculateWalls;
-    ButtonWidget resetWalls;
+    Button landingModeButton;
+    Button axisButton;
+    Button calculateWalls;
+    Button resetWalls;
 
-    ButtonWidget bbToggle;
-    ButtonWidget condToggle;
+    Button bbToggle;
+    Button condToggle;
 
     public GuiLb(LandingBlock b) {
         super("Landing/Momentum Gui");
@@ -27,62 +27,62 @@ public class GuiLb extends CyvGui {
 
     @Override
     public void init() {
-        if (lb == null) this.close();
+        if (lb == null) this.onClose();
 
-        this.landingModeButton = ButtonWidget.builder(Text.of("Landing Mode: " + lb.mode.toString()), (widget) -> {
+        this.landingModeButton = Button.builder(Component.nullToEmpty("Landing Mode: " + lb.mode.toString()), (widget) -> {
                     landingModeButtonPressed();
-                }).dimensions(this.width - 155, 5, 150, 20)
+                }).bounds(this.width - 155, 5, 150, 20)
                 .build();
 
-        this.axisButton = ButtonWidget.builder(Text.of("Axis: " + lb.axis.toString()), (widget) -> {
+        this.axisButton = Button.builder(Component.nullToEmpty("Axis: " + lb.axis.toString()), (widget) -> {
                     axisButtonPressed();
-                }).dimensions(this.width - 155, 30, 150, 20)
+                }).bounds(this.width - 155, 30, 150, 20)
                 .build();
 
-        this.calculateWalls = ButtonWidget.builder(Text.of("Calculate Walls"), (widget) -> {
+        this.calculateWalls = Button.builder(Component.nullToEmpty("Calculate Walls"), (widget) -> {
                     lb.calculateWalls();
-                }).dimensions(this.width - 155, 105, 150, 20)
+                }).bounds(this.width - 155, 105, 150, 20)
                 .build();
 
-        this.resetWalls = ButtonWidget.builder(Text.of("Reset Walls"), (widget) -> {
+        this.resetWalls = Button.builder(Component.nullToEmpty("Reset Walls"), (widget) -> {
                     lb.xMinWall = null;
                     lb.xMaxWall = null;
                     lb.zMinWall = null;
                     lb.zMaxWall = null;
-                }).dimensions(this.width - 155, 130, 150, 20)
+                }).bounds(this.width - 155, 130, 150, 20)
                 .build();
 
-        this.bbToggle = ButtonWidget.builder(Text.of("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)), (widget) -> {
+        this.bbToggle = Button.builder(Component.nullToEmpty("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)), (widget) -> {
                     CyvClientConfig.set("highlightLanding", !CyvClientConfig.getBoolean("highlightLanding", false));
-                    bbToggle.setMessage(Text.of("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)));
-                }).dimensions(this.width - 155, 55, 150, 20)
+                    bbToggle.setMessage(Component.nullToEmpty("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)));
+                }).bounds(this.width - 155, 55, 150, 20)
                 .build();
 
-        this.condToggle = ButtonWidget.builder(Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)), (widget) -> {
+        this.condToggle = Button.builder(Component.nullToEmpty("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)), (widget) -> {
                     CyvClientConfig.set("highlightLandingCond", !CyvClientConfig.getBoolean("highlightLandingCond", false));
-                    bbToggle.setMessage(Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)));
-                }).dimensions(this.width - 155, 80, 150, 20)
+                    bbToggle.setMessage(Component.nullToEmpty("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)));
+                }).bounds(this.width - 155, 80, 150, 20)
                 .build();
 
         if (lb.axis.equals(LandingAxis.both)) {
             lb.axis = LandingAxis.both;
-            this.axisButton.setMessage(Text.of("Axis: Both"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: Both"));
         } else if (lb.axis.equals(LandingAxis.z)) {
             lb.axis = LandingAxis.z;
-            this.axisButton.setMessage(Text.of("Axis: Z"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: Z"));
         } else {
             lb.axis = LandingAxis.x;
-            this.axisButton.setMessage(Text.of("Axis: X"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: X"));
         }
 
         if (lb.mode.equals(LandingMode.landing)) {
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Landing"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Landing"));
         } else if (lb.mode.equals(LandingMode.hit)) {
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Hit"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Hit"));
         } else if (lb.mode.equals(LandingMode.z_neo)) {
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Z Neo"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Z Neo"));
         } else {
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Enter"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Enter"));
         }
 
     }
@@ -91,16 +91,16 @@ public class GuiLb extends CyvGui {
         LandingMode mode = lb.mode;
         if (mode.equals(LandingMode.landing)) {
             lb.mode = LandingMode.hit;
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Hit"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Hit"));
         } else if (mode.equals(LandingMode.hit)) {
             lb.mode = LandingMode.z_neo;
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Z Neo"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Z Neo"));
         } else if (mode.equals(LandingMode.z_neo)) {
             lb.mode = LandingMode.enter;
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Enter"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Enter"));
         } else {
             lb.mode = LandingMode.landing;
-            this.landingModeButton.setMessage(Text.of("Landing Mode: Landing"));
+            this.landingModeButton.setMessage(Component.nullToEmpty("Landing Mode: Landing"));
         }
     }
 
@@ -108,19 +108,19 @@ public class GuiLb extends CyvGui {
         LandingAxis mode = lb.axis;
         if (mode.equals(LandingAxis.both)) {
             lb.axis = LandingAxis.z;
-            this.axisButton.setMessage(Text.of("Axis: Z"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: Z"));
         } else if (mode.equals(LandingAxis.z)) {
             lb.axis = LandingAxis.x;
-            this.axisButton.setMessage(Text.of("Axis: X"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: X"));
         } else {
             lb.axis = LandingAxis.both;
-            this.axisButton.setMessage(Text.of("Axis: Both"));
+            this.axisButton.setMessage(Component.nullToEmpty("Axis: Both"));
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderInGameBackground(context);
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+        this.renderTransparentBackground(context);
 
         landingModeButton.render(context, mouseX, mouseY, partialTicks);
         axisButton.render(context, mouseX, mouseY, partialTicks);
@@ -133,7 +133,7 @@ public class GuiLb extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         landingModeButton.mouseClicked(click, doubled);
         axisButton.mouseClicked(click, doubled);
         calculateWalls.mouseClicked(click, doubled);
@@ -146,7 +146,7 @@ public class GuiLb extends CyvGui {
 
     @Override
     public void tick() {
-        if (lb == null) this.close();
+        if (lb == null) this.onClose();
     }
 
 }

@@ -4,8 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import java.text.DecimalFormat;
 
 public class CommandSetSensitivity extends CyvCommand {
@@ -32,8 +31,8 @@ public class CommandSetSensitivity extends CyvCommand {
 
             }
 
-            MinecraftClient.getInstance().options.getMouseSensitivity().setValue(sensitivity);
-            MinecraftClient.getInstance().options.write();
+            Minecraft.getInstance().options.sensitivity().set(sensitivity);
+            Minecraft.getInstance().options.save();
 
             double percentage = 200 * sensitivity;
             DecimalFormat df = CyvFabric.df;

@@ -8,14 +8,13 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.gui.config.panels.*;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.lwjgl.glfw.GLFW;
-
+import com.mojang.blaze3d.platform.Window;
 import java.util.ArrayList;
 
 public class GuiModConfig extends CyvGui {
@@ -35,14 +34,14 @@ public class GuiModConfig extends CyvGui {
 
     public GuiModConfig() {
         super("Mod Config");
-        sr = MinecraftClient.getInstance().getWindow();
+        sr = Minecraft.getInstance().getWindow();
 
-        this.backButton = new SubButton("Back", sr.getScaledWidth()/2-sizeX/2-4, sr.getScaledHeight()/2-sizeY/2-21);
+        this.backButton = new SubButton("Back", sr.getGuiScaledWidth()/2-sizeX/2-4, sr.getGuiScaledHeight()/2-sizeY/2-21);
         this.theme = CyvFabric.theme;
 
         this.updatePanels();
 
-        maxScroll = (int) Math.max(0, MinecraftClient.getInstance().textRenderer.fontHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
+        maxScroll = (int) Math.max(0, Minecraft.getInstance().font.lineHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
     }
@@ -52,33 +51,33 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public void resize(MinecraftClient mcIn, int w, int h) {
-        this.close();
+    public void resize(int w, int h) {
+        this.onClose();
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
         //background
-        this.renderInGameBackground(context);
+        this.renderTransparentBackground(context);
         this.theme = CyvFabric.theme;
 
         //draw text
-        context.drawCenteredTextWithShadow(textRenderer, "CyvFabric Config",
-                sr.getScaledWidth()/2, sr.getScaledHeight()/2-sizeY/2-18, 0xFFFFFFFF);
+        context.drawCenteredString(font, "CyvFabric Config",
+                sr.getGuiScaledWidth()/2, sr.getGuiScaledHeight()/2-sizeY/2-18, 0xFFFFFFFF);
 
         //draw the menu background
-        GuiUtils.drawRoundedRect(context, sr.getScaledWidth()/2-sizeX/2-4, sr.getScaledHeight()/2-sizeY/2-4,
-                sr.getScaledWidth()/2+sizeX/2+14, sr.getScaledHeight()/2+sizeY/2+4, 10, theme.background1);
+        GuiUtils.drawRoundedRect(context, sr.getGuiScaledWidth()/2-sizeX/2-4, sr.getGuiScaledHeight()/2-sizeY/2-4,
+                sr.getGuiScaledWidth()/2+sizeX/2+14, sr.getGuiScaledHeight()/2+sizeY/2+4, 10, theme.background1);
 
         //buttons
         this.backButton.draw(context, mouseX, mouseY + (int) scroll);
 
         //begin scissoring (I am a very mature individual who does not have a dirty mind)
-        double centerx = sr.getScaledWidth()/2;
-        double centery = sr.getScaledHeight()/2;
-        double scaleFactor = sr.getScaleFactor();
+        double centerx = sr.getGuiScaledWidth()/2;
+        double centery = sr.getGuiScaledHeight()/2;
+        double scaleFactor = sr.getGuiScale();
 
-        context.enableScissor(0, (int) (centery - sizeY/2), sr.getWidth(), (int) (centery + sizeY/2));
+        context.enableScissor(0, (int) (centery - sizeY/2), sr.getScreenWidth(), (int) (centery + sizeY/2));
 
         for (ConfigPanel p : this.panels) {
             p.draw(context, mouseX, mouseY + (int)scroll, (int)scroll);
@@ -91,21 +90,21 @@ public class GuiModConfig extends CyvGui {
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
 
-        int top = sr.getScaledHeight()/2-sizeY/2+4;
-        int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
+        int top = sr.getGuiScaledHeight()/2-sizeY/2+4;
+        int bottom = sr.getGuiScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
 
         if (maxScroll == 0) amount = top;
 
         //color
         int color = theme.border2;
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
+        if (mouseX > sr.getGuiScaledWidth()/2+sizeX/2+2 && mouseX < sr.getGuiScaledWidth()/2+sizeX/2+8 &&
                 mouseY > amount && mouseY < amount+scrollbarHeight) {
             color = theme.border1;
         }
 
-        GuiUtils.drawRoundedRect(context, sr.getScaledWidth()/2+sizeX/2+2, amount,
-                sr.getScaledWidth()/2+sizeX/2+8, amount+scrollbarHeight, 3, color);
+        GuiUtils.drawRoundedRect(context, sr.getGuiScaledWidth()/2+sizeX/2+2, amount,
+                sr.getGuiScaledWidth()/2+sizeX/2+8, amount+scrollbarHeight, 3, color);
     }
 
     @Override
@@ -161,19 +160,19 @@ public class GuiModConfig extends CyvGui {
         panels.add(new ConfigPanelEmptySpace(19, this));
         panels.add(new ConfigPanelToggle(20, "smoothMacro", "Smooth Macro", this));
 
-        maxScroll = (int) Math.max(0, MinecraftClient.getInstance().textRenderer.fontHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
+        maxScroll = (int) Math.max(0, Minecraft.getInstance().font.lineHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
     }
 
     @Override
-    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+    public boolean mouseDragged(MouseButtonEvent click, double offsetX, double offsetY) {
         if (this.scrollClicked) {
             int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
-            int top = sr.getScaledHeight()/2-sizeY/2+4;
-            int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
+            int top = sr.getGuiScaledHeight()/2-sizeY/2+4;
+            int bottom = sr.getGuiScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
 
-            scroll = (int) ((float) (click.y() - (sr.getScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
+            scroll = (int) ((float) (click.y() - (sr.getGuiScaledHeight()/2-this.sizeY/2) - scrollbarHeight/2) /(bottom - top) * maxScroll);
 
             if (scroll > maxScroll) scroll = maxScroll;
             if (scroll < 0) scroll = 0;
@@ -195,11 +194,11 @@ public class GuiModConfig extends CyvGui {
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
 
-        int top = sr.getScaledHeight()/2-sizeY/2+4;
-        int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
+        int top = sr.getGuiScaledHeight()/2-sizeY/2+4;
+        int bottom = sr.getGuiScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
         if (maxScroll == 0) amount = top;
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
+        if (mouseX > sr.getGuiScaledWidth()/2+sizeX/2+2 && mouseX < sr.getGuiScaledWidth()/2+sizeX/2+8 &&
                 mouseY > amount && mouseY < amount+scrollbarHeight) {
             scrollClicked = true;
         } else scrollClicked = false;
@@ -214,13 +213,13 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
-        int top = sr.getScaledHeight()/2-sizeY/2+4;
-        int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
+        int top = sr.getGuiScaledHeight()/2-sizeY/2+4;
+        int bottom = sr.getGuiScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
         int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
 
-        if (click.x() > sr.getScaledWidth()/2+sizeX/2+2 && click.x() < sr.getScaledWidth()/2+sizeX/2+8 &&
+        if (click.x() > sr.getGuiScaledWidth()/2+sizeX/2+2 && click.x() < sr.getGuiScaledWidth()/2+sizeX/2+8 &&
                 click.y() > amount && click.y() < amount+scrollbarHeight) {
             this.scrollClicked = true;
             return true;
@@ -229,12 +228,12 @@ public class GuiModConfig extends CyvGui {
         }
 
         if (this.backButton.clicked(click)) {
-            this.close();
+            this.onClose();
             return true;
         }
 
-        if (click.x() < sr.getScaledWidth()/2-sizeX/2-4 || click.x() > sr.getScaledWidth()/2+sizeX/2+14 ||
-                click.y() < sr.getScaledHeight()/2-sizeY/2-4 || click.y() > sr.getScaledHeight()/2+sizeY/2+4) {
+        if (click.x() < sr.getGuiScaledWidth()/2-sizeX/2-4 || click.x() > sr.getGuiScaledWidth()/2+sizeX/2+14 ||
+                click.y() < sr.getGuiScaledHeight()/2-sizeY/2-4 || click.y() > sr.getGuiScaledHeight()/2+sizeY/2+4) {
             this.selectedPanel = null;
             return true;
         }
@@ -243,7 +242,7 @@ public class GuiModConfig extends CyvGui {
             if (p.mouseInBounds(click.x(), click.y()+(int)scroll)) {
                 if (this.selectedPanel != null) this.selectedPanel.unselect();
 
-                p.mouseClicked(new Click(click.x(), click.y()+(int)scroll, click.buttonInfo()), doubled);
+                p.mouseClicked(new MouseButtonEvent(click.x(), click.y()+(int)scroll, click.buttonInfo()), doubled);
                 this.selectedPanel = p;
                 p.select();
                 return true;
@@ -255,9 +254,9 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(CharacterEvent input) {
         if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
-            this.close();
+            this.onClose();
             return true;
         }
 
@@ -270,13 +269,13 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public boolean keyPressed(KeyInput input) {
-        if (input.getKeycode() == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean keyPressed(KeyEvent input) {
+        if (input.input() == GLFW.GLFW_KEY_ESCAPE) {
             if (this.selectedPanel != null) {
                 this.selectedPanel.unselect();
                 this.selectedPanel = null;
             }
-            else this.close();
+            else this.onClose();
             return true;
         }
 
@@ -306,13 +305,13 @@ public class GuiModConfig extends CyvGui {
             this.y = y;
         }
 
-        void draw(DrawContext context, int mouseX, int mouseY) {
+        void draw(GuiGraphics context, int mouseX, int mouseY) {
             boolean mouseDown = (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
             GuiUtils.drawRoundedRect(context, x, y, x+sizeX, y+sizeY, 5, mouseDown ? theme.highlight : theme.background1);
-            context.drawCenteredTextWithShadow(textRenderer, this.text, x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
+            context.drawCenteredString(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
         }
 
-        boolean clicked(Click click) {
+        boolean clicked(MouseButtonEvent click) {
             if (!(click.x() > x && click.x() < x+sizeX && click.y() > y && click.y() < y+sizeY && click.button() == 0)) return false;
             else return true;
         }

@@ -4,9 +4,8 @@ import net.cyvfabric.keybinding.*;
 import net.cyvfabric.util.CyvKeybinding;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import java.util.ArrayList;
 
 public class KeyInputHandler {
@@ -20,7 +19,7 @@ public class KeyInputHandler {
         cyvKeybindings.add(new KeybindingRunMacro());
         cyvKeybindings.add(new KeybindingStopMacro());
 
-        for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
+        for (KeyMapping k : cyvKeybindings) { //register each keybinding in the array
             KeyBindingHelper.registerKeyBinding(k);
         }
 
@@ -30,16 +29,16 @@ public class KeyInputHandler {
     /**register actions of keys to Minecraft*/
     public static void registerKeyInputs() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> { //start of tick
-            if (MinecraftClient.getInstance().world == null) return; //don't run unless in-game
+            if (Minecraft.getInstance().level == null) return; //don't run unless in-game
             for (CyvKeybinding k : cyvKeybindings) {
-                k.onTickStart(k.isPressed());
+                k.onTickStart(k.isDown());
             }
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> { //end of tick
-            if (MinecraftClient.getInstance().world == null) return; //don't run unless in-game
+            if (Minecraft.getInstance().level == null) return; //don't run unless in-game
             for (CyvKeybinding k : cyvKeybindings) {
-                k.onTickEnd(k.wasPressed());
+                k.onTickEnd(k.consumeClick());
             }
         });
     }
