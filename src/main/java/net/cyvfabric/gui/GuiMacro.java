@@ -17,7 +17,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import java.awt.*;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class GuiMacro extends CyvGui {
     }
 
     @Override
-    public void resize(Minecraft mcIn, int w, int h) {
+    public void resize(int w, int h) {
         onClose();
     }
 

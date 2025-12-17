@@ -40,7 +40,7 @@ public class GuiMPK extends CyvGui {
     }
 
     @Override
-    public void resize(Minecraft mcIn, int w, int h) {
+    public void resize(int w, int h) {
         onClose();
     }
 

@@ -51,7 +51,7 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public void resize(Minecraft mcIn, int w, int h) {
+    public void resize(int w, int h) {
         this.onClose();
     }
 
