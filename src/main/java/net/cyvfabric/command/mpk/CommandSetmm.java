@@ -8,11 +8,11 @@ import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class CommandSetmm extends CyvCommand {
     public CommandSetmm() {
@@ -28,8 +28,8 @@ public class CommandSetmm extends CyvCommand {
     }
 
     public static void run(String[] args) {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        ClientPlayerEntity player = mc.player;
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
 
         new Thread(() -> {
             LandingMode mode = LandingMode.landing;
@@ -49,12 +49,12 @@ public class CommandSetmm extends CyvCommand {
             }
 
             if (target) {
-                HitResult hit = player.raycast(100, 0, false);
+                HitResult hit = player.pick(100, 0, false);
                 if (hit.getType().equals(HitResult.Type.BLOCK)) {
                     try {
                         BlockPos pos = ((BlockHitResult) hit).getBlockPos();
 
-                        if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
+                        if (mc.level.getBlockState(pos).getCollisionShape(mc.level, pos).isEmpty()) {
                             CyvFabric.sendChatMessage("Please look at a valid block.");
                             return;
                         } else {
@@ -70,15 +70,15 @@ public class CommandSetmm extends CyvCommand {
                 }
             }
             else {
-                if (player.isOnGround()) {
+                if (player.onGround()) {
                     int yLevel = player.getBlockY();
 
                     BlockPos pos = new BlockPos(player.getBlockX(),
                             (int) (yLevel > 0 ? Math.floor(yLevel-0.001) : Math.floor(yLevel-0.001)), player.getBlockZ());
 
-                    if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) pos = pos.down();
+                    if (mc.level.getBlockState(pos).getCollisionShape(mc.level, pos).isEmpty()) pos = pos.below();
 
-                    if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
+                    if (mc.level.getBlockState(pos).getCollisionShape(mc.level, pos).isEmpty()) {
                         CyvFabric.sendChatMessage("Please stand on a valid block.");
                         return;
                     } else {

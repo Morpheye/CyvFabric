@@ -12,8 +12,7 @@ import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.argument.MessageArgumentType;
-
+import net.minecraft.commands.arguments.MessageArgument;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,12 +50,12 @@ public class CommandInitializer  {
             //register the base command
             LiteralCommandNode<FabricClientCommandSource> baseCommand = dispatcher.register(
                     (ClientCommandManager.literal("cyv")
-                    .requires(source -> source.getPlayer().hasPermissionLevel(0)))
+                    .requires(source -> source.getPlayer().hasPermissions(0)))
                     .executes(context -> {
                         CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
                      })
-                    .then(ClientCommandManager.argument("message", MessageArgumentType.message()).executes(context -> {
+                    .then(ClientCommandManager.argument("message", MessageArgument.message()).executes(context -> {
                         List<String> argsList = new ArrayList<>(Arrays.stream(context.getInput().split(" ")).toList());
                         argsList.remove(0);
                         String[] args = argsList.toArray(String[]::new);

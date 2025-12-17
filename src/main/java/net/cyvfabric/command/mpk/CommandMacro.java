@@ -13,10 +13,7 @@ import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
-
+import net.minecraft.client.Minecraft;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ public class CommandMacro extends CyvCommand {
 
     public static void runMacro(String[] args) {
         MacroFileInit.swapFile(CyvClientConfig.getString("currentMacro", "macro"));
-        if (!MinecraftClient.getInstance().isInSingleplayer()) {
+        if (!Minecraft.getInstance().isLocalServer()) {
             CyvFabric.sendChatMessage("No permission to run macro.");
             return;
         }

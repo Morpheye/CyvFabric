@@ -10,20 +10,19 @@ import net.cyvfabric.hud.nonlabels.TogglesprintHUD;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.Window;
-
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import com.mojang.blaze3d.platform.Window;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HUDManager {
     public static List<DraggableHUDElement> registeredRenderers = new ArrayList<DraggableHUDElement>();
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static Minecraft mc = Minecraft.getInstance();
 
     public static void init() { //initialize and create eventlistener
         HudElementRegistry.addLast(RenderLayers.LABELS_LAYER, HUDManager::render);
@@ -47,30 +46,30 @@ public class HUDManager {
 
     }
 
-    private static void render(DrawContext context, RenderTickCounter partialTicks) {
+    private static void render(GuiGraphics context, DeltaTracker partialTicks) {
         if (CommandMacro.macroRunning > 0) { //macrorunning
             Window sr = mc.getWindow();
-            context.drawText(mc.textRenderer, "MACRO",
-                    sr.getScaledWidth()/2 - mc.textRenderer.getWidth("MACRO") / 2,
-                    sr.getScaledHeight()/5, 0xFFFF0000, false);
+            context.drawString(mc.font, "MACRO",
+                    sr.getGuiScaledWidth()/2 - mc.font.width("MACRO") / 2,
+                    sr.getGuiScaledHeight()/5, 0xFFFF0000, false);
         }
 
-        if (mc.currentScreen == null || mc.currentScreen instanceof GenericContainerScreen ||
-                mc.currentScreen instanceof ChatScreen || mc.currentScreen instanceof GuiModConfig
-                || mc.currentScreen instanceof GuiMPK) {
+        if (mc.screen == null || mc.screen instanceof ContainerScreen ||
+                mc.screen instanceof ChatScreen || mc.screen instanceof GuiModConfig
+                || mc.screen instanceof GuiMPK) {
             for (DraggableHUDElement renderer : registeredRenderers) {
-                if (mc.currentScreen instanceof GenericContainerScreen && !renderer.renderInGui()) continue;
-                if (mc.currentScreen instanceof ChatScreen && !renderer.renderInChat()) continue;
+                if (mc.screen instanceof ContainerScreen && !renderer.renderInGui()) continue;
+                if (mc.screen instanceof ChatScreen && !renderer.renderInChat()) continue;
 
-                GameOptions gameSettings = mc.options;
-                if (mc.debugHudEntryList.isF3Enabled() && !renderer.renderInOverlay()) continue;
+                Options gameSettings = mc.options;
+                if (mc.debugEntries.isF3Visible() && !renderer.renderInOverlay()) continue;
 
                 callRenderer(renderer, context, partialTicks);
             }
         }
     }
 
-    private static void callRenderer(DraggableHUDElement renderer, DrawContext context, RenderTickCounter partialTicks) {
+    private static void callRenderer(DraggableHUDElement renderer, GuiGraphics context, DeltaTracker partialTicks) {
         if (!renderer.isEnabled) return;
         if (!renderer.isVisible) return;
 

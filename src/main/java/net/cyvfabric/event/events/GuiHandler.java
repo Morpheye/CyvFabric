@@ -1,8 +1,8 @@
 package net.cyvfabric.event.events;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 //This class is used to handle GUIs for CyvFabric
 public class GuiHandler {
@@ -14,9 +14,9 @@ public class GuiHandler {
 
     public static void register() { //register the eventListener
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
-            if (MinecraftClient.getInstance().world == null) return; //don't run unless in-game
+            if (Minecraft.getInstance().level == null) return; //don't run unless in-game
             if (screenAwaiting != null) {
-                MinecraftClient.getInstance().setScreen(screenAwaiting); //set the screen
+                Minecraft.getInstance().setScreen(screenAwaiting); //set the screen
                 screenAwaiting = null; //now that no screen is awaiting, clear it
                 return;
             }

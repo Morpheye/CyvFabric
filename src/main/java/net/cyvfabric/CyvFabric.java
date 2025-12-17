@@ -4,8 +4,8 @@ import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,7 @@ public class CyvFabric implements ModInitializer {
 	public static final String MOD_ID = "cyvfabric";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static  CyvClientConfig config = new CyvClientConfig();
+	public static CyvClientConfig config = new CyvClientConfig();
 	public static DecimalFormat df = new DecimalFormat("#");
 	public static ColorTheme theme = ColorTheme.CYVISPIRIA;
 
@@ -30,7 +30,7 @@ public class CyvFabric implements ModInitializer {
 		try {
 			String chatColor2 = CyvClientConfig.getBoolean("whiteChat", false) ? CyvClientColorHelper.colors.get(12).chatColor
 					: CyvClientColorHelper.color2.chatColor;
-			MinecraftClient.getInstance().player.sendMessage(Text.of(
+			Minecraft.getInstance().player.displayClientMessage(Component.nullToEmpty(
 				CyvClientColorHelper.color1.chatColor + "<Cyv> " + chatColor2 + text.toString()), false);
 		} catch (Exception e) {
 			LOGGER.error(e.toString());

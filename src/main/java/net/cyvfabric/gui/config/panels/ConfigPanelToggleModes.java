@@ -1,16 +1,16 @@
 package net.cyvfabric.gui.config.panels;
 
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 
 public class ConfigPanelToggleModes implements ConfigPanel {
     public boolean sliderValue;
@@ -35,27 +35,27 @@ public class ConfigPanelToggleModes implements ConfigPanel {
         this.s1 = s1;
         this.s2 = s2;
 
-        Window sr = MinecraftClient.getInstance().getWindow();
+        Window sr = Minecraft.getInstance().getWindow();
         sizeX = screenIn.sizeX - 20;
-        sizeY = MinecraftClient.getInstance().textRenderer.fontHeight * 3 / 2;
-        this.xPosition = sr.getScaledWidth() / 2 - screenIn.sizeX / 2 + 10;
-        this.yPosition = sr.getScaledHeight() / 2 - screenIn.sizeY / 2 + 10 + (index * MinecraftClient.getInstance().textRenderer.fontHeight * 2);
+        sizeY = Minecraft.getInstance().font.lineHeight * 3 / 2;
+        this.xPosition = sr.getGuiScaledWidth() / 2 - screenIn.sizeX / 2 + 10;
+        this.yPosition = sr.getGuiScaledHeight() / 2 - screenIn.sizeY / 2 + 10 + (index * Minecraft.getInstance().font.lineHeight * 2);
         this.sliderValue = CyvClientConfig.getBoolean(configOption, false);
 
     }
 
     @Override
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll) {
-        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+    public void draw(GuiGraphics context, int mouseX, int mouseY, int scroll) {
+        Font textRenderer = Minecraft.getInstance().font;
 
         //text label
-        context.drawTextWithShadow(textRenderer, this.displayString, this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        context.drawString(textRenderer, this.displayString, this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
         //bg
         GuiUtils.drawRoundedRect(context, this.xPosition + this.sizeX / 2, this.yPosition - scroll, this.xPosition + this.sizeX, this.yPosition + this.sizeY - scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.accent1 : CyvFabric.theme.accent2);
 
         //amount
-        context.drawCenteredTextWithShadow(textRenderer, this.sliderValue ? s1 : s2, this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        context.drawCenteredString(textRenderer, this.sliderValue ? s1 : s2, this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
     }
 
@@ -72,14 +72,14 @@ public class ConfigPanelToggleModes implements ConfigPanel {
     }
 
     @Override
-    public void mouseClicked(Click click, boolean doubled) {
+    public void mouseClicked(MouseButtonEvent click, boolean doubled) {
         this.sliderValue = !this.sliderValue;
         CyvClientConfig.set(this.configOption, this.sliderValue);
         onValueChange();
     }
 
     @Override
-    public void charTyped(CharInput input) {
+    public void charTyped(CharacterEvent input) {
         // TODO Auto-generated method stub
 
     }

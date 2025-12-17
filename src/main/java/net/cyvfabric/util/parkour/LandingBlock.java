@@ -1,23 +1,22 @@
 package net.cyvfabric.util.parkour;
 
 import net.cyvfabric.CyvFabric;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.block.VineBlock;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.World;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LandingBlock {
 
     public BlockPos pos;
-    public Box[] bb; //bounding boxes
+    public AABB[] bb; //bounding boxes
     public LandingMode mode;
     public LandingAxis axis;
     public boolean isBox;
@@ -51,13 +50,13 @@ public class LandingBlock {
         this.zMaxCond = this.largestZ() + 1;
     }
 
-    public LandingBlock(Box bounds) {
-        this.pos = BlockPos.ofFloored(bounds.minX, bounds.minY, bounds.minZ);
+    public LandingBlock(AABB bounds) {
+        this.pos = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
         this.mode = LandingMode.landing;
         this.axis = LandingAxis.both;
         this.isBox = false;
 
-        this.bb = new Box[] {bounds};
+        this.bb = new AABB[] {bounds};
 
         this.xMinCond = this.smallestX() - 1;
         this.xMaxCond = this.largestX() + 1;
@@ -67,8 +66,8 @@ public class LandingBlock {
 
     private void calculateBounds() {
         if (this.pos == null) return;
-        MinecraftClient mc = MinecraftClient.getInstance();
-        World world = mc.world;
+        Minecraft mc = Minecraft.getInstance();
+        Level world = mc.level;
 
         BlockState blockState = world.getBlockState(pos);
         VoxelShape collisionBox = blockState.getCollisionShape(world, pos);
@@ -76,20 +75,20 @@ public class LandingBlock {
 
         //THIS IS TEMPORARY. I will find a better solution in the future
         if (isBox && (block instanceof LadderBlock || block instanceof VineBlock)) {
-            double playerX = MinecraftClient.getInstance().player.getBoundingBox().getLengthX();
-            double playerZ = MinecraftClient.getInstance().player.getBoundingBox().getLengthZ();
-            Box box = new Box(playerX/2 + pos.getX(), pos.getY(), playerZ/2 + pos.getZ(),
+            double playerX = Minecraft.getInstance().player.getBoundingBox().getXsize();
+            double playerZ = Minecraft.getInstance().player.getBoundingBox().getZsize();
+            AABB box = new AABB(playerX/2 + pos.getX(), pos.getY(), playerZ/2 + pos.getZ(),
                     1-playerX/2 + pos.getX(), 1 + pos.getY(), 1-playerZ/2 + pos.getZ());
-            this.bb = new Box[] {box};
+            this.bb = new AABB[] {box};
 
             return;
         }
 
-        Box[] tempB = collisionBox.getBoundingBoxes().toArray(Box[]::new);
-        this.bb = new Box[tempB.length];
+        AABB[] tempB = collisionBox.toAabbs().toArray(AABB[]::new);
+        this.bb = new AABB[tempB.length];
 
         for (int i=0; i<tempB.length; i++) {
-            bb[i] = new Box(tempB[i].minX + pos.getX(), tempB[i].minY + pos.getY(), tempB[i].minZ + pos.getZ(),
+            bb[i] = new AABB(tempB[i].minX + pos.getX(), tempB[i].minY + pos.getY(), tempB[i].minZ + pos.getZ(),
                     tempB[i].maxX + pos.getX(), tempB[i].maxY + pos.getY(), tempB[i].maxZ + pos.getZ());
         }
 
@@ -97,7 +96,7 @@ public class LandingBlock {
 
     public double smallestX() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v > bb.minX) v = bb.minX;
         }
         return v;
@@ -105,7 +104,7 @@ public class LandingBlock {
 
     public double smallestY() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v > bb.minY) v = bb.minY;
         }
         return v;
@@ -113,7 +112,7 @@ public class LandingBlock {
 
     public double smallestZ() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v > bb.minZ) v = bb.minZ;
         }
         return v;
@@ -121,7 +120,7 @@ public class LandingBlock {
 
     public double largestX() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v < bb.maxX) v = bb.maxX;
         }
         return v;
@@ -129,7 +128,7 @@ public class LandingBlock {
 
     public double largestY() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v < bb.maxY) v = bb.maxY;
         }
         return v;
@@ -137,7 +136,7 @@ public class LandingBlock {
 
     public double largestZ() {
         Double v = null;
-        for (Box bb : this.bb) {
+        for (AABB bb : this.bb) {
             if (v == null || v < bb.maxZ) v = bb.maxZ;
         }
         return v;
@@ -165,28 +164,28 @@ public class LandingBlock {
     }
 
     public void calculateWalls() {
-        World world = MinecraftClient.getInstance().world;
-        Box playerHitbox = MinecraftClient.getInstance().player.getBoundingBox();
+        Level world = Minecraft.getInstance().level;
+        AABB playerHitbox = Minecraft.getInstance().player.getBoundingBox();
         BlockPos tempPos = pos; //new variable, because this will be lowered by one if the mode is currently "enter"
-        if (this.mode == LandingMode.enter) tempPos = tempPos.down();
+        if (this.mode == LandingMode.enter) tempPos = tempPos.below();
 
         xMinWall = null; xMaxWall = null; zMinWall = null; zMaxWall = null;
 
-        for (Box box : bb) {
-            ArrayList<Box> wallBoxes = new ArrayList<Box>();
+        for (AABB box : bb) {
+            ArrayList<AABB> wallBoxes = new ArrayList<AABB>();
             BlockPos currentWallPos = null; //current x/z position of checked wall
             double offset, currentWall; //temporary variables
 
             //z back
             currentWallPos = tempPos.north();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
-                currentWallPos = currentWallPos.up();
-                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
+            for (double i = 0; i < playerHitbox.getYsize(); i++) {
+                currentWallPos = currentWallPos.above();
+                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).toAabbs());
             }
-            for (Box wall : wallBoxes) {
-                if (wall.getLengthX() < box.getLengthX()) continue; //skip if not wide enough
+            for (AABB wall : wallBoxes) {
+                if (wall.getXsize() < box.getXsize()) continue; //skip if not wide enough
                 currentWall = wall.maxZ + currentWallPos.getZ();
-                offset = box.minZ - currentWall - playerHitbox.getLengthZ();
+                offset = box.minZ - currentWall - playerHitbox.getZsize();
 
                 if (offset < 0) {
                     if (zMinWall == null || currentWall > zMinWall) zMinWall = currentWall;
@@ -196,14 +195,14 @@ public class LandingBlock {
             //z front
             wallBoxes.clear();
             currentWallPos = tempPos.south();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
-                currentWallPos = currentWallPos.up();
-                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
+            for (double i = 0; i < playerHitbox.getYsize(); i++) {
+                currentWallPos = currentWallPos.above();
+                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).toAabbs());
             }
-            for (Box wall : wallBoxes) {
-                if (wall.getLengthX() < box.getLengthX()) continue; //skip if not wide enough
+            for (AABB wall : wallBoxes) {
+                if (wall.getXsize() < box.getXsize()) continue; //skip if not wide enough
                 currentWall = wall.minZ + currentWallPos.getZ();
-                offset = currentWall - box.maxZ - playerHitbox.getLengthZ();
+                offset = currentWall - box.maxZ - playerHitbox.getZsize();
 
                 if (offset < 0) {
                     if (zMaxWall == null || currentWall > zMaxWall) zMaxWall = currentWall;
@@ -213,14 +212,14 @@ public class LandingBlock {
             //x right
             wallBoxes.clear();
             currentWallPos = tempPos.west();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
-                currentWallPos = currentWallPos.up();
-                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
+            for (double i = 0; i < playerHitbox.getYsize(); i++) {
+                currentWallPos = currentWallPos.above();
+                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).toAabbs());
             }
-            for (Box wall : wallBoxes) {
-                if (wall.getLengthZ() < box.getLengthZ()) continue; //skip if not wide enough
+            for (AABB wall : wallBoxes) {
+                if (wall.getZsize() < box.getZsize()) continue; //skip if not wide enough
                 currentWall = wall.maxX + currentWallPos.getX();
-                offset = box.minX - currentWall - playerHitbox.getLengthX();
+                offset = box.minX - currentWall - playerHitbox.getXsize();
 
                 if (offset < 0) {
                     if (xMinWall == null || currentWall > xMinWall) xMinWall = currentWall;
@@ -230,14 +229,14 @@ public class LandingBlock {
             //x left
             wallBoxes.clear();
             currentWallPos = tempPos.east();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
-                currentWallPos = currentWallPos.up();
-                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
+            for (double i = 0; i < playerHitbox.getYsize(); i++) {
+                currentWallPos = currentWallPos.above();
+                wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).toAabbs());
             }
-            for (Box wall : wallBoxes) {
-                if (wall.getLengthZ() < box.getLengthZ()) continue; //skip if not wide enough
+            for (AABB wall : wallBoxes) {
+                if (wall.getZsize() < box.getZsize()) continue; //skip if not wide enough
                 currentWall = wall.minX + currentWallPos.getX();
-                offset = currentWall - box.maxX - playerHitbox.getLengthX();
+                offset = currentWall - box.maxX - playerHitbox.getXsize();
 
                 if (offset < 0) {
                     if (xMaxWall == null || currentWall > xMaxWall) xMaxWall = currentWall;

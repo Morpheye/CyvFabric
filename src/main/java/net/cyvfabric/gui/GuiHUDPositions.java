@@ -7,13 +7,12 @@ import net.cyvfabric.hud.structure.IRenderer;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.lwjgl.glfw.GLFW;
-
+import com.mojang.blaze3d.platform.Window;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
@@ -47,8 +46,8 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderInGameBackground(context);
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+        this.renderTransparentBackground(context);
 
         GuiUtils.drawBorder(context, 0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 
@@ -68,14 +67,14 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(CharacterEvent input) {
         if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) {
             renderers.entrySet().forEach((entry) -> {
                 entry.getKey().save(entry.getValue());
             });
 
-            if (fromLabels) MinecraftClient.getInstance().setScreen(new GuiMPK());
-            else this.close();
+            if (fromLabels) Minecraft.getInstance().setScreen(new GuiMPK());
+            else this.onClose();
             return true;
         } else if (input.codepoint() == GLFW.GLFW_KEY_UP) {
             if (selectedRenderer.isPresent()) {
@@ -111,7 +110,7 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+    public boolean mouseDragged(MouseButtonEvent click, double offsetX, double offsetY) {
         if (click.button() == 0) { //left-clicked
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
@@ -129,7 +128,7 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         this.prevX = 0;
         this.prevY = 0;
 
@@ -167,10 +166,10 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     private void adjustBounds(IRenderer renderer, ScreenPosition pos) {
-        Window res = MinecraftClient.getInstance().getWindow();
+        Window res = Minecraft.getInstance().getWindow();
 
-        int screenWidth = res.getScaledWidth();
-        int screenHeight = res.getScaledHeight();
+        int screenWidth = res.getGuiScaledWidth();
+        int screenHeight = res.getGuiScaledHeight();
 
         int absoluteX = Math.max(0, Math.min(pos.getAbsoluteX(), Math.max(screenWidth - renderer.getWidth(), 0)));
         int absoluteY = Math.max(0, Math.min(pos.getAbsoluteY(), Math.max(screenHeight - renderer.getHeight(), 0)));

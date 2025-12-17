@@ -7,9 +7,8 @@ import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import java.text.DecimalFormat;
 
 public class LabelBundleSpeeds extends LabelBundle {
@@ -22,26 +21,26 @@ public class LabelBundleSpeeds extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 187);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(GuiGraphics context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 DecimalFormat df = CyvFabric.df;
                 String x = df.format(ParkourTickListener.vx);
                 drawString(context, "X Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, x, pos.getAbsoluteX() + 1 + font.getWidth("X Speed: ")
+                drawString(context, x, pos.getAbsoluteX() + 1 + font.width("X Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 String str = "0.";
                 for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
                 drawString(context, "X Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("X Speed: ")
+                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("X Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -53,26 +52,26 @@ public class LabelBundleSpeeds extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 196);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(GuiGraphics context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 DecimalFormat df = CyvFabric.df;
                 String y = df.format(ParkourTickListener.vy);
                 drawString(context, "Y Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, y, pos.getAbsoluteX() + 1 + font.getWidth("Y Speed: ")
+                drawString(context, y, pos.getAbsoluteX() + 1 + font.width("Y Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 String str = "0.";
                 for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
                 drawString(context, "Y Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("Y Speed: ")
+                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Y Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -84,26 +83,26 @@ public class LabelBundleSpeeds extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 205);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(GuiGraphics context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 DecimalFormat df = CyvFabric.df;
                 String z = df.format(ParkourTickListener.vz);
                 drawString(context, "Z Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, z, pos.getAbsoluteX() + 1 + font.getWidth("Z Speed: ")
+                drawString(context, z, pos.getAbsoluteX() + 1 + font.width("Z Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
-                TextRenderer font = mc.textRenderer;
+                Font font = mc.font;
                 String str = "0.";
                 for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
                 drawString(context, "Z Speed: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("Z Speed: ")
+                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Z Speed: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
