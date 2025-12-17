@@ -13,6 +13,9 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.arguments.MessageArgument;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,8 +52,10 @@ public class CommandInitializer  {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             //register the base command
             LiteralCommandNode<FabricClientCommandSource> baseCommand = dispatcher.register(
-                    (ClientCommandManager.literal("cyv")
-                    .requires(source -> source.getPlayer().hasPermissions(0)))
+                    ClientCommandManager.literal("cyv")
+                    .requires(source -> source.getPlayer().permissions().hasPermission(
+                            new Permission.HasCommandLevel(PermissionLevel.ALL)
+                    ))
                     .executes(context -> {
                         CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
