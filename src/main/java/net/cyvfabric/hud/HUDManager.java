@@ -1,5 +1,6 @@
 package net.cyvfabric.hud;
 
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.command.mpk.CommandMacro;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.gui.GuiModConfig;
@@ -10,13 +11,13 @@ import net.cyvfabric.hud.nonlabels.TogglesprintHUD;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
-import com.mojang.blaze3d.platform.Window;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class HUDManager {
     private static Minecraft mc = Minecraft.getInstance();
 
     public static void init() { //initialize and create eventlistener
-        HudElementRegistry.addLast(RenderLayers.LABELS_LAYER, HUDManager::render);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.PLAYER_LIST, RenderLayers.LABELS_LAYER, HUDManager::render);
 
         registeredRenderers.add(new DirectionHUD());
         registeredRenderers.add(new TogglesprintHUD());
