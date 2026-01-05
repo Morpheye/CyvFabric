@@ -53,9 +53,6 @@ public class CommandInitializer  {
             //register the base command
             LiteralCommandNode<FabricClientCommandSource> baseCommand = dispatcher.register(
                     ClientCommandManager.literal("cyv")
-                    .requires(source -> source.getPlayer().permissions().hasPermission(
-                            new Permission.HasCommandLevel(PermissionLevel.ALL)
-                    ))
                     .executes(context -> {
                         CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
