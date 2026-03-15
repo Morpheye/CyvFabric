@@ -8,9 +8,10 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import org.jetbrains.annotations.UnknownNullability;
 
 public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
     public int sliderValue;
@@ -49,17 +50,17 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
     }
 
     @Override
-    public void draw(GuiGraphics context, int mouseX, int mouseY, int scroll) {
+    public void draw(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, int scroll) {
         Font textRenderer = Minecraft.getInstance().font;
 
         //text label
-        context.drawString(textRenderer, this.displayString, this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        context.text(textRenderer, this.displayString, this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
         //bg
         GuiUtils.drawRoundedRect(context, this.xPosition + this.sizeX / 2, this.yPosition - scroll, this.xPosition + this.sizeX, this.yPosition + this.sizeY - scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.accent1 : CyvFabric.theme.accent2);
 
         //amount
-        context.drawCenteredString(textRenderer, ""+this.sliderValues[this.sliderValue], this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        context.centeredText(textRenderer, ""+this.sliderValues[this.sliderValue], this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.lineHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
     }
 

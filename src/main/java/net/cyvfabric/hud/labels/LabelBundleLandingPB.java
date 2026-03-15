@@ -8,7 +8,8 @@ import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 import java.text.DecimalFormat;
 
 public class LabelBundleLandingPB extends LabelBundle {
@@ -20,7 +21,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 0);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -34,11 +35,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     pb = (ParkourTickListener.landingBlock.pb == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.pb);
                 }
 
-                drawString(context, "PB: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, pb, pos.getAbsoluteX() + 1 + font.width("PB: ")
+                text(context, "PB: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                text(context, pb, pos.getAbsoluteX() + 1 + font.width("PB: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -47,8 +48,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "PB: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("PB: ")
+                text(context, "PB: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("PB: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -59,7 +60,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 9);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -73,11 +74,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     x = (ParkourTickListener.landingBlock.lastOffsetX == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.lastOffsetX.doubleValue());
                 }
 
-                drawString(context, "X Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, x, pos.getAbsoluteX() + 1 + font.width("X Offset: ")
+                text(context, "X Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, x, pos.getAbsoluteX() + 1 + font.width("X Offset: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -86,8 +87,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "X Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("X Offset: ")
+                text(context, "X Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("X Offset: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
@@ -98,7 +99,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 18);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -112,11 +113,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     z = (ParkourTickListener.landingBlock.lastOffsetZ == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.lastOffsetZ.doubleValue());
                 }
 
-                drawString(context, "Z Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, z, pos.getAbsoluteX() + 1 + font.width("Z Offset: ")
+                text(context, "Z Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, z, pos.getAbsoluteX() + 1 + font.width("Z Offset: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -125,8 +126,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "Z Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Z Offset: ")
+                text(context, "Z Offset: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("Z Offset: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
@@ -138,7 +139,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 45);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -152,11 +153,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     pb = (ParkourTickListener.landingBlock.lastPb == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.lastPb);
                 }
 
-                drawString(context, "Total Offset: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, pb, pos.getAbsoluteX() + 1 + font.width("Total Offset: ")
+                text(context, "Total Offset: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                text(context, pb, pos.getAbsoluteX() + 1 + font.width("Total Offset: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -165,8 +166,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "Total Offset: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Total Offset: ")
+                text(context, "Total Offset: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("Total Offset: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -178,7 +179,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 27);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -192,11 +193,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     x = (ParkourTickListener.landingBlock.pbX == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.pbX.doubleValue());
                 }
 
-                drawString(context, "X PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, x, pos.getAbsoluteX() + 1 + font.width("X PB: ")
+                text(context, "X PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, x, pos.getAbsoluteX() + 1 + font.width("X PB: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -205,8 +206,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "X PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("X PB: ")
+                text(context, "X PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("X PB: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
@@ -218,7 +219,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(106, 36);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -232,11 +233,11 @@ public class LabelBundleLandingPB extends LabelBundle {
                     z = (ParkourTickListener.landingBlock.pbZ == null) ? "NaN" : df.format(ParkourTickListener.landingBlock.pbZ.doubleValue());
                 }
 
-                drawString(context, "Z PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, z, pos.getAbsoluteX() + 1 + font.width("Z PB: ")
+                text(context, "Z PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, z, pos.getAbsoluteX() + 1 + font.width("Z PB: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -245,8 +246,8 @@ public class LabelBundleLandingPB extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "Z PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Z PB: ")
+                text(context, "Z PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("Z PB: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });

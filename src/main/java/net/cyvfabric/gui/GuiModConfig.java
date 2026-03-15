@@ -9,10 +9,11 @@ import net.cyvfabric.gui.config.panels.*;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import org.jetbrains.annotations.UnknownNullability;
 import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import java.util.ArrayList;
@@ -56,13 +57,13 @@ public class GuiModConfig extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
         //background
-        this.renderTransparentBackground(context);
+        this.extractTransparentBackground(context);
         this.theme = CyvFabric.theme;
 
         //draw text
-        context.drawCenteredString(font, "CyvFabric Config",
+        context.centeredText(font, "CyvFabric Config",
                 sr.getGuiScaledWidth()/2, sr.getGuiScaledHeight()/2-sizeY/2-18, 0xFFFFFFFF);
 
         //draw the menu background
@@ -305,10 +306,10 @@ public class GuiModConfig extends CyvGui {
             this.y = y;
         }
 
-        void draw(GuiGraphics context, int mouseX, int mouseY) {
+        void draw(GuiGraphicsExtractor context, int mouseX, int mouseY) {
             boolean mouseDown = (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
             GuiUtils.drawRoundedRect(context, x, y, x+sizeX, y+sizeY, 5, mouseDown ? theme.highlight : theme.background1);
-            context.drawCenteredString(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
+            context.centeredText(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
         }
 
         boolean clicked(MouseButtonEvent click) {

@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 
@@ -47,10 +47,10 @@ public class HUDManager {
 
     }
 
-    private static void render(GuiGraphics context, DeltaTracker partialTicks) {
+    private static void render(GuiGraphicsExtractor context, DeltaTracker partialTicks) {
         if (CommandMacro.macroRunning > 0) { //macrorunning
             Window sr = mc.getWindow();
-            context.drawString(mc.font, "MACRO",
+            context.text(mc.font, "MACRO",
                     sr.getGuiScaledWidth()/2 - mc.font.width("MACRO") / 2,
                     sr.getGuiScaledHeight()/5, 0xFFFF0000, false);
         }
@@ -69,7 +69,7 @@ public class HUDManager {
         }
     }
 
-    private static void callRenderer(DraggableHUDElement renderer, GuiGraphics context, DeltaTracker partialTicks) {
+    private static void callRenderer(DraggableHUDElement renderer, GuiGraphicsExtractor context, DeltaTracker partialTicks) {
         if (!renderer.isEnabled) return;
         if (!renderer.isVisible) return;
 
@@ -79,7 +79,7 @@ public class HUDManager {
             pos = renderer.getDefaultPosition();
         }
 
-        renderer.render(context, pos);
+        renderer.extractRenderState(context, pos);
 
     }
 

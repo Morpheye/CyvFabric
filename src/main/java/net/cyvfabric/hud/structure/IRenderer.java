@@ -1,19 +1,19 @@
 package net.cyvfabric.hud.structure;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public interface IRenderer {
     int getWidth();
     int getHeight();
 
-    public void save(ScreenPosition pos);
+    void save(ScreenPosition pos);
 
-    public ScreenPosition load();
+    ScreenPosition load();
 
-    void render(GuiGraphics context, ScreenPosition pos);
+    void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos);
 
-    default void renderDummy(GuiGraphics context, ScreenPosition pos) {
-        render(context, pos);
+    default void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
+        extractRenderState(context, pos);
     }
 
     default boolean renderInChat() {
@@ -27,7 +27,4 @@ public interface IRenderer {
     default boolean renderInOverlay() {
         return false;
     }
-
-    
-
 }

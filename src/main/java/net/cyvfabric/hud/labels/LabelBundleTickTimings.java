@@ -7,7 +7,7 @@ import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class LabelBundleTickTimings extends LabelBundle {
 
@@ -21,25 +21,25 @@ public class LabelBundleTickTimings extends LabelBundle {
             }
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 56);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 Font font = mc.font;
 
                 String timing = ParkourTickListener.lastTiming;
-                drawString(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, timing, pos.getAbsoluteX() + 1 + font.width("Last Timing: ")
+                text(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
+                text(context, timing, pos.getAbsoluteX() + 1 + font.width("Last Timing: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 Font font = mc.font;
 
-                drawString(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, "[Timing]", pos.getAbsoluteX() + 1 + font.width("Last Timing: ")
+                text(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                text(context, "[Timing]", pos.getAbsoluteX() + 1 + font.width("Last Timing: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -50,7 +50,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 65);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -58,18 +58,18 @@ public class LabelBundleTickTimings extends LabelBundle {
 
                 int airtime = ParkourTickListener.lastAirtime;
 
-                drawString(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, airtime, pos.getAbsoluteX() + 1 + font.width("Airtime: ")
+                text(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, airtime, pos.getAbsoluteX() + 1 + font.width("Airtime: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 Font font = mc.font;
 
-                drawString(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, 0, pos.getAbsoluteX() + 1 + font.width("Airtime: ")
+                text(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, 0, pos.getAbsoluteX() + 1 + font.width("Airtime: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
@@ -81,7 +81,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(177, 137);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -89,18 +89,18 @@ public class LabelBundleTickTimings extends LabelBundle {
 
                 int airtime = 12 - ParkourTickListener.lastAirtime;
 
-                drawString(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, airtime, pos.getAbsoluteX() + 1 + font.width("Tier: ")
+                text(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, airtime, pos.getAbsoluteX() + 1 + font.width("Tier: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 Font font = mc.font;
 
-                drawString(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, 0, pos.getAbsoluteX() + 1 + font.width("Tier: ")
+                text(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, 0, pos.getAbsoluteX() + 1 + font.width("Tier: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });

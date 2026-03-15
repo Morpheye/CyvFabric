@@ -1,7 +1,7 @@
 package net.cyvfabric.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -12,17 +12,9 @@ public class CyvGui extends Screen {
         super(Component.nullToEmpty(name));
     }
 
-    @Override //called upon GUI initialization or resizing
-    protected void init() {}
-
-    @Override //called each frame, put the drawScreen things here.
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
-        Minecraft mc = Minecraft.getInstance();
-    }
-
-    @Override //called every tick
-    public void tick() {
-
+    //called each frame, put the drawScreen things here.
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
+//        Minecraft mc = Minecraft.getInstance();
     }
 
     @Override //called upon GUI closing

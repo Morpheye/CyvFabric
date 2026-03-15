@@ -6,13 +6,14 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.UnknownNullability;
 import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import java.text.DecimalFormat;
@@ -44,7 +45,7 @@ public class GuiSimulate extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
         Window sr = Minecraft.getInstance().getWindow();
         int width = sr.getGuiScaledWidth();
         int height = sr.getGuiScaledHeight();
@@ -54,14 +55,14 @@ public class GuiSimulate extends CyvGui {
         int x2 = (int) (sr.getGuiScaledWidth() * 0.80);
         int y2 = (int) (sr.getGuiScaledHeight() * 0.50);
 
-        super.renderTransparentBackground(context); //background tint
+        super.extractTransparentBackground(context); //background tint
         GuiUtils.drawRoundedRect(context, x1-2, y1-2, x2+2, y2+2, 9, 0x88000000);
         GuiUtils.drawRoundedRect(context, x1, y1, x2, y2, 7, 0x11000000);
 
-        input.render(context, mouseX, mouseY, partialTicks);
-        button.render(context, mouseX, mouseY, partialTicks);
+        input.extractRenderState(context, mouseX, mouseY, partialTicks);
+        button.extractRenderState(context, mouseX, mouseY, partialTicks);
 
-        context.drawCenteredString(font, "Movement Simulator", x1+46, y1-15, 0xFFFFFFFF);
+        context.centeredText(font, "Movement Simulator", x1+46, y1-15, 0xFFFFFFFF);
     }
 
     @Override

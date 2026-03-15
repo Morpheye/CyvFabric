@@ -10,7 +10,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class MacroListener {
         HudElementRegistry.addLast(RenderLayers.MACRO_LAYER, MacroListener::onRender);
     }
 
-    public static void onRender(GuiGraphics context, DeltaTracker partialTicks) {
+    public static void onRender(GuiGraphicsExtractor context, DeltaTracker partialTicks) {
         if (!CyvClientConfig.getBoolean("smoothMacro", false)) return;
 
         Minecraft mc = Minecraft.getInstance();
@@ -57,7 +57,6 @@ public class MacroListener {
             }
 
         }
-
 
     }
 

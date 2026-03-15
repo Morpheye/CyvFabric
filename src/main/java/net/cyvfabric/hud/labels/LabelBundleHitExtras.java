@@ -8,7 +8,8 @@ import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 import java.text.DecimalFormat;
 
 public class LabelBundleHitExtras extends LabelBundle {
@@ -20,7 +21,7 @@ public class LabelBundleHitExtras extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(177, 146);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -29,11 +30,11 @@ public class LabelBundleHitExtras extends LabelBundle {
                 DecimalFormat df = CyvFabric.df;
                 String z = df.format(ParkourTickListener.formatYaw(ParkourTickListener.hf))+"\u00B0";
 
-                drawString(context, "Hit Angle: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, z, pos.getAbsoluteX() + 1 + font.width("Hit Angle: ")
+                text(context, "Hit Angle: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, z, pos.getAbsoluteX() + 1 + font.width("Hit Angle: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -42,8 +43,8 @@ public class LabelBundleHitExtras extends LabelBundle {
                 String str = "0.";
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
 
-                drawString(context, "Hit Angle: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Angle: ")
+                text(context, "Hit Angle: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Angle: ")
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
@@ -63,7 +64,7 @@ public class LabelBundleHitExtras extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(177, 155);}
-            public void render(GuiGraphics context, ScreenPosition pos) {
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -73,15 +74,15 @@ public class LabelBundleHitExtras extends LabelBundle {
                 String speed = df.format(Math.hypot(ParkourTickListener.hvx, ParkourTickListener.hvz));
                 String angle = df.format(Math.toDegrees(Math.atan2((ParkourTickListener.hvx == 0) ? 0 : -ParkourTickListener.hvx, ParkourTickListener.hvz)));
 
-                drawString(context, "Hit Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, speed, pos.getAbsoluteX() + 1 + font.width("Hit Vector: ")
+                text(context, "Hit Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
+                text(context, speed, pos.getAbsoluteX() + 1 + font.width("Hit Vector: ")
                         , pos.getAbsoluteY() + 1, color2);
-                drawString(context, "/", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + speed)
+                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + speed)
                         , pos.getAbsoluteY() + 1, color1);
-                drawString(context, angle+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + speed + "/")
+                text(context, angle+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + speed + "/")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -89,12 +90,12 @@ public class LabelBundleHitExtras extends LabelBundle {
 
                 String str = "0.";
                 for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
-                drawString(context, "Hit Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.width("Hit Vector: ")
+                text(context, "Hit Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
+                text(context, str, pos.getAbsoluteX() + 1 + font.width("Hit Vector: ")
                         , pos.getAbsoluteY() + 1, color2);
-                drawString(context, "/", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + str)
+                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + str)
                         , pos.getAbsoluteY() + 1, color1);
-                drawString(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + str + "/")
+                text(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Hit Vector: " + str + "/")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
