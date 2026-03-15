@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Dev builds
+    url: https://github.com/Morpheye/CyvFabric/actions
+    about: Check out the latest development build before submitting an issue
+  - name: Discord server
+    url: https://discord.gg/a9qQZdVGZx
+    about: Join the Discord server

@@ -1,0 +1,44 @@
+name: Bug Report
+description: Report a bug in CyvFabric
+labels: [ S-needs-review, T-bug ]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before reporting a bug, please see if using latest build from https://github.com/Morpheye/CyvFabric/actions?query=is%3Asuccess fixes your issue.**
+        Whenever you see fit, you can upload images or videos to any of the text fields.
+
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: |
+        Describe the unexpected behavior.
+      placeholder: |
+        Example: "Mark timing doesn't work"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        List the steps on how we can reproduce the issue.
+        Make sure each step is easy to understand.
+      placeholder: |
+        Example:
+        1. Jam with D
+        2. Add W
+        3. Observe that a mark timing isn't triggered
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: |
+        Describe what exactly you expected to happen.
+      placeholder: |
+        Example: "A mark timing should be detected."
+    validations:
+      required: true
