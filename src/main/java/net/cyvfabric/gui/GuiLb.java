@@ -5,10 +5,11 @@ import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.UnknownNullability;
 
 public class GuiLb extends CyvGui {
     LandingBlock lb;
@@ -119,16 +120,16 @@ public class GuiLb extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
-        this.renderTransparentBackground(context);
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
+        this.extractTransparentBackground(context);
 
-        landingModeButton.render(context, mouseX, mouseY, partialTicks);
-        axisButton.render(context, mouseX, mouseY, partialTicks);
-        calculateWalls.render(context, mouseX, mouseY, partialTicks);
-        resetWalls.render(context, mouseX, mouseY, partialTicks);
+        landingModeButton.extractRenderState(context, mouseX, mouseY, partialTicks);
+        axisButton.extractRenderState(context, mouseX, mouseY, partialTicks);
+        calculateWalls.extractRenderState(context, mouseX, mouseY, partialTicks);
+        resetWalls.extractRenderState(context, mouseX, mouseY, partialTicks);
 
-        bbToggle.render(context, mouseX, mouseY, partialTicks);
-        condToggle.render(context, mouseX, mouseY, partialTicks);
+        bbToggle.extractRenderState(context, mouseX, mouseY, partialTicks);
+        condToggle.extractRenderState(context, mouseX, mouseY, partialTicks);
 
     }
 

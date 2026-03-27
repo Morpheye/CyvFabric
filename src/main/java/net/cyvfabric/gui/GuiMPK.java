@@ -8,12 +8,13 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.UnknownNullability;
 import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import java.util.ArrayList;
@@ -110,8 +111,8 @@ public class GuiMPK extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
-        this.renderTransparentBackground(context);
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
+        this.extractTransparentBackground(context);
 
         maxScroll = (int) Math.max(0, mc.font.lineHeight * 2 * Math.ceil(labelLines.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
@@ -123,7 +124,7 @@ public class GuiMPK extends CyvGui {
         int centerx = sr.getGuiScaledWidth() / 2;
         int centery = sr.getGuiScaledHeight() / 2;
 
-        context.drawCenteredString(font, "MPK Gui:", sr.getGuiScaledWidth()/2, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
+        context.centeredText(font, "MPK Gui:", sr.getGuiScaledWidth()/2, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
 
         //draw searchbar
         ColorTheme theme = CyvFabric.theme;
@@ -149,7 +150,7 @@ public class GuiMPK extends CyvGui {
                 searchBar.getY() + searchBar.getHeight() + 1,
                 2, theme.highlight);
         if (!this.searchBar.isFocused() && this.searchBar.getValue().length() == 0) {
-            context.drawString(font, "Search", searchBar.getX() + 16,
+            context.text(font, "Search", searchBar.getX() + 16,
                     (int) (searchBar.getY() + 0.5f),
                     0xFFFFFFFF, true);
 
@@ -166,7 +167,7 @@ public class GuiMPK extends CyvGui {
 
         } else {
         }
-        this.searchBar.render(context, mouseX, mouseY, partialTicks);
+        this.searchBar.extractRenderState(context, mouseX, mouseY, partialTicks);
         this.button.draw(context, mouseX, mouseY);
 
         context.enableScissor(centerx - ((sizeX + 10)/2),
@@ -319,13 +320,13 @@ public class GuiMPK extends CyvGui {
             this.label = label;
         }
 
-        public void drawEntry(GuiGraphics context, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected) {
+        public void drawEntry(GuiGraphicsExtractor context, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected) {
             int yHeight = (slotIndex + 1) * font.lineHeight*2 - scroll + (sr.getGuiScaledHeight()/2 - sizeY/2);
             GuiUtils.drawRoundedRect(context, xStart, yHeight + 1,
                     xStart + width, yHeight + height - 1,
                     3, label.isEnabled ? CyvFabric.theme.shade2 : CyvFabric.theme.secondary1);
 
-            context.drawString(font, label.getDisplayName(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
+            context.text(font, label.getDisplayName(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
 
         }
 
@@ -355,11 +356,11 @@ public class GuiMPK extends CyvGui {
             this.y = y;
         }
 
-        void draw(GuiGraphics context, int mouseX, int mouseY) {
+        void draw(GuiGraphicsExtractor context, int mouseX, int mouseY) {
             ColorTheme theme = CyvFabric.theme;
             boolean mouseDown = (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
             GuiUtils.drawRoundedRect(context, x, y, x+sizeX, y+sizeY, 5, mouseDown ? theme.highlight : theme.background1);
-            context.drawCenteredString(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
+            context.centeredText(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
         }
 
         boolean clicked(MouseButtonEvent click) {

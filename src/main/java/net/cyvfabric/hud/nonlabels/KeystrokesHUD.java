@@ -6,7 +6,8 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,9 @@ public class KeystrokesHUD extends DraggableHUDElement {
         return (int)(getWidth()*1.05);
     }
 
+
     @Override
-    public void render(GuiGraphics context, ScreenPosition pos) {
+    public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
         if (this.keys == null || this.keys.isEmpty()) refreshKeys();
 
         for (Key key : keys) {
@@ -55,18 +57,17 @@ public class KeystrokesHUD extends DraggableHUDElement {
                     pos.getAbsoluteX() + key.x + key.width, pos.getAbsoluteY() + key.y + key.height, 2,
                     key.isDown() ? new Color(255, 255, 255, 102).getRGB() : new Color(20, 20, 20, 102).getRGB());
 
-            context.drawCenteredString(mc.font, displayString, pos.getAbsoluteX() + key.x + key.width/2,
+            context.centeredText(mc.font, displayString, pos.getAbsoluteX() + key.x + key.width/2,
                     pos.getAbsoluteY() + key.y + key.height/2 - (int)(mc.font.lineHeight * (size*scale/66.0F)/2) + 1,
                     key.isDown() ? (int) CyvClientColorHelper.color1.drawColor : Color.white.getRGB());
         }
     }
 
     @Override
-    public void renderDummy(GuiGraphics context, ScreenPosition pos) {
+    public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
         if (!this.isVisible) return;
 
-        this.render(context, pos);
-
+        this.extractRenderState(context, pos);
     }
 
     private class Key {

@@ -8,9 +8,10 @@ import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import org.jetbrains.annotations.UnknownNullability;
 import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import java.util.Collection;
@@ -46,8 +47,8 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
-        this.renderTransparentBackground(context);
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
+        this.extractTransparentBackground(context);
 
         GuiUtils.drawBorder(context, 0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 

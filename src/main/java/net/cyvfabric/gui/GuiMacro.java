@@ -11,12 +11,13 @@ import net.cyvfabric.event.MacroFileInit;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -116,8 +117,8 @@ public class GuiMacro extends CyvGui {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
-        super.renderTransparentBackground(context);
+    public void extractRenderState(@UnknownNullability GuiGraphicsExtractor context, int mouseX, int mouseY, float partialTicks) {
+        super.extractTransparentBackground(context);
 
         maxScroll = (int) Math.max(0, font.lineHeight * 2 * Math.ceil(macroLines.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
@@ -133,7 +134,7 @@ public class GuiMacro extends CyvGui {
         GuiUtils.drawRoundedRect(context, (sr.getGuiScaledWidth() + sizeY +30)/2 - 75, sr.getGuiScaledHeight()/2 - sizeY/2 + 20,
                 (sr.getGuiScaledWidth() + sizeY +30)/2 + 20, sr.getGuiScaledHeight()/2 - sizeY/2 + 20 + font.lineHeight*7/4,
                 3, CyvFabric.theme.shade2);
-        this.fileName.render(context, mouseX, mouseY, partialTicks);
+        this.fileName.extractRenderState(context, mouseX, mouseY, partialTicks);
         this.loadFile.draw(context, mouseX, mouseY);
 
         this.addRow.enabled = true;
@@ -146,9 +147,9 @@ public class GuiMacro extends CyvGui {
         }
 
 
-        context.drawString(font, "Inputs:", sr.getGuiScaledWidth()/2 - sizeX/2 + 13, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
-        context.drawString(font, "Yaw:", sr.getGuiScaledWidth()/2 - 34, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
-        context.drawString(font, "Pitch:", sr.getGuiScaledWidth()/2 - 1, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
+        context.text(font, "Inputs:", sr.getGuiScaledWidth()/2 - sizeX/2 + 13, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
+        context.text(font, "Yaw:", sr.getGuiScaledWidth()/2 - 34, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
+        context.text(font, "Pitch:", sr.getGuiScaledWidth()/2 - 1, 5 + sr.getGuiScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
 
         context.enableScissor(sr.getGuiScaledWidth()/2 - ((sizeX/2 + 20)),
                 sr.getGuiScaledHeight()/2 - (sizeY/2) + 3 + (font.lineHeight * 2),
@@ -157,7 +158,7 @@ public class GuiMacro extends CyvGui {
         int index = 0;
         for (MacroLine l : macroLines) {
             int yHeight = (int) ((index + 1) * font.lineHeight*2 - scroll + (sr.getGuiScaledHeight()/2 - sizeY/2));
-            context.drawString(font, ""+(index+1), sr.getGuiScaledWidth()/2 - sizeX/2 - 10,
+            context.text(font, ""+(index+1), sr.getGuiScaledWidth()/2 - sizeX/2 - 10,
                     yHeight + font.lineHeight*2/3, 0xFFFFFFFF);
             l.drawEntry(context, index, (int) scroll, mouseX, mouseY, index == this.selectedIndex, partialTicks);
             index++;
@@ -480,7 +481,7 @@ public class GuiMacro extends CyvGui {
             this.pitchField.setValue("0.0");
         }
 
-        public void drawEntry(GuiGraphics context, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+        public void drawEntry(GuiGraphicsExtractor context, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
             int yHeight = (slotIndex + 1) * height - scroll + (sr.getGuiScaledHeight()/2 - sizeY/2);
             GuiUtils.drawRoundedRect(context, xStart, yHeight + 1,
                     xStart + width, yHeight + height - 1,
@@ -495,7 +496,7 @@ public class GuiMacro extends CyvGui {
             if (sprint) string.append("Spr ");
             if (sneak) string.append("Snk ");
 
-            context.drawString(font, string.toString(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
+            context.text(font, string.toString(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
 
             this.yawField.setY(yHeight + font.lineHeight*3/4);
             this.pitchField.setY(yHeight + font.lineHeight*3/4);
@@ -514,8 +515,8 @@ public class GuiMacro extends CyvGui {
                 this.pitchField.setFocused(false);
             }
 
-            this.yawField.render(context, mouseX, mouseY, partialTicks);
-            this.pitchField.render(context, mouseX, mouseY, partialTicks);
+            this.yawField.extractRenderState(context, mouseX, mouseY, partialTicks);
+            this.pitchField.extractRenderState(context, mouseX, mouseY, partialTicks);
 
         }
 
@@ -552,11 +553,11 @@ public class GuiMacro extends CyvGui {
             this.y = y;
         }
 
-        void draw(GuiGraphics context, int mouseX, int mouseY) {
+        void draw(GuiGraphicsExtractor context, int mouseX, int mouseY) {
             boolean mouseDown = (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
             ColorTheme theme = CyvFabric.theme;
             GuiUtils.drawRoundedRect(context, x, y, x+sizeX, y+sizeY, 5, enabled ? (mouseDown ? theme.main1 : theme.main2) : theme.secondary1);
-            context.drawCenteredString(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
+            context.centeredText(font, this.text, x+sizeX/2, y+sizeY/2-font.lineHeight/2, 0xFFFFFFFF);
         }
 
         boolean clicked(MouseButtonEvent click) {

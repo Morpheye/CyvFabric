@@ -1,13 +1,10 @@
 package net.cyvfabric.gui.config.panels;
 
 import com.mojang.blaze3d.platform.Window;
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
-import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 
@@ -33,7 +30,7 @@ public class ConfigPanelEmptySpace implements ConfigPanel {
     }
 
     @Override
-    public void draw(GuiGraphics context, int mouseX, int mouseY, int scroll) {}
+    public void draw(GuiGraphicsExtractor context, int mouseX, int mouseY, int scroll) {}
 
     @Override
     public void mouseDragged(double mouseX, double mouseY) {}

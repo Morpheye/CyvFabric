@@ -3,7 +3,8 @@ package net.cyvfabric.hud.structure;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 import java.util.LinkedHashMap;
 
 public abstract class DraggableHUDElement implements IRenderer {
@@ -62,9 +63,6 @@ public abstract class DraggableHUDElement implements IRenderer {
         CyvClientConfig.set(this.getName()+"_visible", this.isVisible);
         CyvClientConfig.set(this.getName()+"_posx", this.position.getAbsoluteX());
         CyvClientConfig.set(this.getName()+"_posy", this.position.getAbsoluteY());
-
-        return;
-
     }
 
     public void setEnabled(boolean isEnabled) {
@@ -87,13 +85,12 @@ public abstract class DraggableHUDElement implements IRenderer {
         return true;
     }
 
-    protected void drawString(GuiGraphics context, Object string, int x, int y, long color) {
-        this.drawString(context, string, x, y, color, true);
+    protected void text(GuiGraphicsExtractor context, Object string, int x, int y, long color) {
+        this.text(context, string, x, y, color, true);
     }
 
-    protected void drawString(GuiGraphics context, Object string, int x, int y, long color, boolean shadow) {
+    protected void text(GuiGraphicsExtractor context, Object string, int x, int y, long color, boolean shadow) {
         long drawColor = (this.isVisible) ? color : 0xFFAAAAAA;
-        context.drawString(mc.font, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
+        context.text(mc.font, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
     }
-
 }

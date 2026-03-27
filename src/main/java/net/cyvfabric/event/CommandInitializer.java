@@ -9,12 +9,10 @@ import net.cyvfabric.command.calculations.*;
 import net.cyvfabric.command.config.*;
 import net.cyvfabric.command.mpk.*;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.arguments.MessageArgument;
-import net.minecraft.server.permissions.Permission;
-import net.minecraft.server.permissions.PermissionLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,12 +50,12 @@ public class CommandInitializer  {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             //register the base command
             LiteralCommandNode<FabricClientCommandSource> baseCommand = dispatcher.register(
-                    ClientCommandManager.literal("cyv")
+                    ClientCommands.literal("cyv")
                     .executes(context -> {
                         CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
                      })
-                    .then(ClientCommandManager.argument("message", MessageArgument.message()).executes(context -> {
+                    .then(ClientCommands.argument("message", MessageArgument.message()).executes(context -> {
                         List<String> argsList = new ArrayList<>(Arrays.stream(context.getInput().split(" ")).toList());
                         argsList.remove(0);
                         String[] args = argsList.toArray(String[]::new);
@@ -93,12 +91,12 @@ public class CommandInitializer  {
                 return 1;
             })));
 
-            dispatcher.register((ClientCommandManager.literal("mpk").redirect(baseCommand)).executes(context -> {
+            dispatcher.register((ClientCommands.literal("mpk").redirect(baseCommand)).executes(context -> {
                 CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                 return 1;
             })); //alias for /cyv
 
-            dispatcher.register((ClientCommandManager.literal("mm").redirect(baseCommand)).executes(context -> {
+            dispatcher.register((ClientCommands.literal("mm").redirect(baseCommand)).executes(context -> {
                 CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                 return 1;
             })); //alias for /cyv
