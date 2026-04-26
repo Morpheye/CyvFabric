@@ -21,6 +21,7 @@ public class ParkourTickListener {
     public static PosTick thirdLastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
 
     public static int lastAirtime;
+    public static int lastRuntime = -1;
     public static int lastStopTime = -1;
     public static double x = 0, y = 0, z = 0; //coords
     public static double vx = 0, vy = 0, vz = 0; //velocities
@@ -462,6 +463,8 @@ public class ParkourTickListener {
         if (lastSidewayMoveTime > 999) lastSidewayMoveTime = 999;
         if (lastMoveTime > 999) lastMoveTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
+        if (lastGroundMoveTime >= 0 && lastTick.onGround)
+            lastRuntime = lastGroundMoveTime;
     }
 
     public static void resetLastTiming() {
