@@ -25,4 +25,11 @@ public class MathHelper {
     public static float mcCos(float angle) {
         return SIN_TABLE[(int) (angle * 10430.378F + 16384.0F) & 65535];
     }
+
+    public static float wrapDegrees(float angle) {
+        float wrapped = angle % 360;
+        if (wrapped > 180) wrapped -= 360;
+        else if (wrapped < -180) wrapped += 360;
+        return wrapped;
+    }
 }
