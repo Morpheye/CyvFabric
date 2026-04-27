@@ -1,125 +1,35 @@
 package net.cyvfabric.hud.labels;
 
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.config.CyvClientColorHelper;
-import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableHUDElement;
+import net.cyvfabric.hud.structure.DraggableHUDLabel;
+import net.cyvfabric.hud.structure.LabelFormat;
 import net.cyvfabric.hud.structure.ScreenPosition;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-
-import java.text.DecimalFormat;
+import net.cyvfabric.util.math.Vec2;
+import net.cyvfabric.util.math.Vec3;
 
 public class LabelBundleSpeedVector extends LabelBundle {
-
     public LabelBundleSpeedVector() {
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelIndividualSpeeds";}
-            public String getDisplayName() {return "Speeds";}
-            public int getWidth() {
-                Font font = mc.font;
-                String num = "000000.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) num += "0";
-                return font.width("Speeds: " + num + "/" + num + "/" + num);
-            }
-            public int getHeight() {return getLabelHeight();}
-            public boolean enabledByDefault() {return false;}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 214);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String x = df.format(ParkourTickListener.vx);
-                String y = df.format(ParkourTickListener.vy);
-                String z = df.format(ParkourTickListener.vz);
-                text(context, "Speeds: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, x, pos.getAbsoluteX() + 1 + font.width("Speeds: ")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speeds: " + x)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, y, pos.getAbsoluteX() + 1 + font.width("Speeds: " + x + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speeds: " + x + "/" + y)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, z, pos.getAbsoluteX() + 1 + font.width("Speeds: " + x + "/" + y + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
-                text(context, "Speeds: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Speeds: ")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speeds: " + str)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Speeds: " + str + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speeds: " + str + "/" + str)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Speeds: " + str + "/" + str + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelIndividualSpeeds",
+                "Speeds",
+                false,
+                new ScreenPosition(0, 214),
+                () -> new Vec3(
+                        ParkourTickListener.vx,
+                        ParkourTickListener.vy,
+                        ParkourTickListener.vz
+                ),
+                LabelFormat.VECTOR_3D
+        ));
 
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelSpeedVector";}
-            public String getDisplayName() {return "Speed Vector";}
-            public int getWidth() {
-                Font font = mc.font;
-                StringBuilder str = new StringBuilder(getDisplayName() + ": 00000.");
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
-                str.append("/000.");
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
-                str.append("\u00B0");
-                return font.width(str.toString());
-            }
-            public int getHeight() {return getLabelHeight();}
-            public boolean enabledByDefault() {return false;}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 223);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-
-                DecimalFormat df = CyvFabric.df;
-                String speed = df.format(Math.hypot(ParkourTickListener.vx, ParkourTickListener.vz));
-                String angle = df.format(Math.toDegrees(Math.atan2((ParkourTickListener.vx == 0) ? 0 : -ParkourTickListener.vx, ParkourTickListener.vz)));
-
-                text(context, "Speed Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, speed, pos.getAbsoluteX() + 1 + font.width("Speed Vector: ")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speed Vector: " + speed)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, angle+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Speed Vector: " + speed + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-
-                String str = "0.";
-                for (int i=0; i<Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString()); i++) str += "0";
-                text(context, "Speed Vector: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Speed Vector: ")
-                        , pos.getAbsoluteY() + 1, color2);
-                text(context, "/", pos.getAbsoluteX() + 1 + font.width("Speed Vector: " + str)
-                        , pos.getAbsoluteY() + 1, color1);
-                text(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Speed Vector: " + str + "/")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
-
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelSpeedVector",
+                "Speed Vector",
+                false,
+                new ScreenPosition(0, 223),
+                () -> new Vec2(ParkourTickListener.vx, ParkourTickListener.vz),
+                LabelFormat.ANGLED_VECTOR
+        ));
     }
-
 }

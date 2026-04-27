@@ -14,25 +14,11 @@ import java.util.List;
 
 public class KeystrokesHUD extends DraggableHUDElement {
     public KeystrokesHUD() {
+        super("keystrokes", "Keystrokes", true, new ScreenPosition(250, 0));
     }
 
     public List<Key> keys;
     public int size = 66;
-
-    @Override
-    public ScreenPosition getDefaultPosition() {
-        return new ScreenPosition(250, 0);
-    }
-
-    @Override
-    public String getName() {
-        return "keystrokes";
-    }
-
-    @Override
-    public String getDisplayName() {
-        return "Keystrokes";
-    }
 
     @Override
     public int getWidth() {

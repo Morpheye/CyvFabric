@@ -8,18 +8,42 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import java.util.LinkedHashMap;
 
 public abstract class DraggableHUDElement implements IRenderer {
-    protected final Minecraft mc;
+    protected final Minecraft mc = Minecraft.getInstance();
+
+    private final String name;
+    private final String displayName;
+    private final boolean enabledByDefault;
+    private final ScreenPosition defaultPosition;
 
     public ScreenPosition position;
     public boolean isVisible = true;
     public boolean isDraggable = true;
     public boolean isEnabled = true;
 
-    public DraggableHUDElement() {
-        this.mc = Minecraft.getInstance();
+    public DraggableHUDElement(String name, String displayName, boolean enabledByDefault, ScreenPosition defaultPosition) {
+        this.name = name;
+        this.displayName = displayName;
+        this.enabledByDefault = enabledByDefault;
+        this.defaultPosition = defaultPosition;
 
         setEnabled(isEnabled);
-        this.position = this.getDefaultPosition();
+        this.position = defaultPosition;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public boolean enabledByDefault() {
+        return enabledByDefault;
+    }
+
+    public ScreenPosition getDefaultPosition() {
+        return defaultPosition;
     }
 
     public final int getLineOffset(ScreenPosition pos, int lineNum) {
@@ -29,8 +53,6 @@ public abstract class DraggableHUDElement implements IRenderer {
     private int getLineOffset(int lineNum) {
         return (Minecraft.getInstance().font.lineHeight + 3) * lineNum;
     }
-
-    public abstract ScreenPosition getDefaultPosition();
 
     public LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> getConfigFields() {
         LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> fields = new LinkedHashMap<String, CyvClientConfig.ConfigValue<?>>();
@@ -75,14 +97,6 @@ public abstract class DraggableHUDElement implements IRenderer {
 
     public ScreenPosition load() {
         return position;
-    }
-
-    public abstract String getName();
-
-    public abstract String getDisplayName();
-
-    public boolean enabledByDefault() {
-        return true;
     }
 
     protected void text(GuiGraphicsExtractor context, Object string, int x, int y, long color) {
