@@ -1,224 +1,76 @@
 package net.cyvfabric.hud.labels;
 
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.config.CyvClientColorHelper;
-import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableHUDElement;
+import net.cyvfabric.hud.structure.DraggableHUDLabel;
+import net.cyvfabric.hud.structure.LabelFormat;
 import net.cyvfabric.hud.structure.ScreenPosition;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-
-import java.text.DecimalFormat;
+import net.minecraft.client.Minecraft;
 
 public class LabelBundleCoordinates extends LabelBundle {
-
     public LabelBundleCoordinates() {
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelFPS";}
-            public String getDisplayName() {return "FPS";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 1);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                text(context, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, mc.getFps(), pos.getAbsoluteX() + 1 + font.width("FPS: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                text(context, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, "360", pos.getAbsoluteX() + 1 + font.width("FPS: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        final Minecraft mc = Minecraft.getInstance();
 
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelX";}
-            public String getDisplayName() {return "X Coord";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 10);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String x = df.format(ParkourTickListener.x);
-                text(context, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, x, pos.getAbsoluteX() + 1 + font.width("X: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                text(context, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("X: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelFPS",
+                "FPS",
+                true,
+                new ScreenPosition(0, 1),
+                mc::getFps,
+                LabelFormat.INTEGER(360)
+        ));
 
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelY";}
-            public String getDisplayName() {return "Y Coord";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 19);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String y = df.format(ParkourTickListener.y);
-                text(context, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, y, pos.getAbsoluteX() + 1 + font.width("Y: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                text(context, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Y: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelX",
+                "X Coord",
+                "X",
+                true,
+                new ScreenPosition(0, 10),
+                () -> ParkourTickListener.x,
+                LabelFormat.NUMBER
+        ));
 
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelZ";}
-            public String getDisplayName() {return "Z Coord";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 28);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String z = df.format(ParkourTickListener.z);
-                text(context, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, z, pos.getAbsoluteX() + 1 + font.width("Z: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                text(context, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, str, pos.getAbsoluteX() + 1 + font.width("Z: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelY",
+                "Y Coord",
+                "Y",
+                true,
+                new ScreenPosition(0, 19),
+                () -> ParkourTickListener.y,
+                LabelFormat.NUMBER
+        ));
 
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelYaw";}
-            public String getDisplayName() {return "Yaw";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 37);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String f;
-                if (/*frameBasedFacing*/false) {
-                    f = df.format(ParkourTickListener.formatYaw(mc.player.getYRot()));
-                } else {
-                    f = (df.format((ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.formatYaw(ParkourTickListener.lastTick.f)))+"\u00B0";
-                }
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelZ",
+                "Z Coord",
+                "Z",
+                true,
+                new ScreenPosition(0, 28),
+                () -> ParkourTickListener.z,
+                LabelFormat.NUMBER
+        ));
 
-                text(context, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, f, pos.getAbsoluteX() + 1 + font.width("F: ")
-                        , pos.getAbsoluteY() + 1, color2);
+        this.labels.add(new DraggableHUDLabel<>(  // TODO: add frame based angles + facing axis options
+                "labelYaw",
+                "Yaw",
+                "F",
+                true,
+                new ScreenPosition(0, 37),
+                () -> (ParkourTickListener.lastTick == null)
+                        ? 0
+                        : ParkourTickListener.lastTick.f,
+                LabelFormat.WRAPPED_ANGLE
+        ));
 
-                if (/*ModCoordinates.this.showAxis*/ false) {
-                    float absFacing = Math.abs(ParkourTickListener.formatYaw(ParkourTickListener.lastTick.f));
-                    text(context, ((absFacing > 45 && absFacing < 135) ? " X" : " Z")
-                            ,pos.getAbsoluteX() + 1 + font.width("F: " + f), pos.getAbsoluteY() + 1, color1);
-                }
-
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                text(context, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("F: ")
-                        , pos.getAbsoluteY() + 1, color2);
-
-                if (/*ModCoordinates.this.showAxis*/ false) {
-                    text(context, " Z",pos.getAbsoluteX() + 1 + font.width("F: " + str+"\u00B0"), pos.getAbsoluteY() + 1, color1);
-                }
-            }
-        });
-
-        this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelPitch";}
-            public String getDisplayName() {return "Pitch";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 46);}
-            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
-                if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                DecimalFormat df = CyvFabric.df;
-                String p;
-                if (/*frameBasedFacing*/ false) {
-                    p = df.format(ParkourTickListener.formatYaw(mc.player.getXRot()));
-                } else {
-                    p = df.format((ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.lastTick.p)+"\u00B0";
-                }
-                text(context, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                text(context, p, pos.getAbsoluteX() + 1 + font.width("Pitch: ")
-                        , pos.getAbsoluteY() + 1, color2);
-
-            }
-            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
-                Font font = mc.font;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                text(context, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                text(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.width("Pitch: ")
-                        , pos.getAbsoluteY() + 1, color2);
-            }
-        });
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelPitch",
+                "Pitch",
+                true,
+                new ScreenPosition(0, 46),
+                () -> (ParkourTickListener.lastTick == null)
+                        ? 0
+                        : ParkourTickListener.lastTick.p,
+                LabelFormat.ANGLE
+        ));
     }
-
 }

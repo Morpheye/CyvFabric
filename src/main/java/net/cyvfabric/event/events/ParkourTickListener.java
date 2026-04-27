@@ -56,7 +56,7 @@ public class ParkourTickListener {
     private static boolean grindStarted = false;
 
     public static float last45 = 0;
-    public static double lastTurning = 0;
+    public static float lastTurning = 0;
 
     public static int sidestep = 0; //0 = wad 1 = wdwa
     public static int sidestepTime = -1;
@@ -558,13 +558,6 @@ public class ParkourTickListener {
             return i;
         }
 
-    }
-
-    public static float formatYaw(float yaw) {
-        float facing = yaw % 360;
-        if (facing > 180) facing -= 360;
-        else if (facing < -180) facing += 360;
-        return facing;
     }
 
     /*
