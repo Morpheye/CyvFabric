@@ -556,13 +556,6 @@ public class ParkourTickListener {
 
     }
 
-    public static float formatYaw(float yaw) {
-        float facing = yaw % 360;
-        if (facing > 180) facing -= 360;
-        else if (facing < -180) facing += 360;
-        return facing;
-    }
-
     /*
     public void onRender(WorldRenderEvent e) {
         if (e.phase != Phase.MID) return;
