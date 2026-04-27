@@ -104,6 +104,66 @@ public class LabelBundleTickTimings extends LabelBundle {
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
+
+        this.labels.add(new DraggableHUDElement() {
+            public String getName() {return "labelStoptime";}
+            public String getDisplayName() {return "Stoptime";}
+            public int getWidth() {return getLabelWidth(getDisplayName());}
+            public int getHeight() {return getLabelHeight();}
+            public boolean enabledByDefault() {return false;}
+            public ScreenPosition getDefaultPosition() {return new ScreenPosition(400, 418);}
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
+                if (!this.isVisible) return;
+                long color1 = CyvClientColorHelper.color1.drawColor;
+                long color2 = CyvClientColorHelper.color2.drawColor;
+                Font font = mc.font;
+
+                int stopTime = ParkourTickListener.lastStopTime;
+
+                text(context, "Stoptime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, stopTime, pos.getAbsoluteX() + 1 + font.width("Stoptime: ")
+                        , (int) (pos.getAbsoluteY() + 1), color2);
+            }
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
+                long color1 = CyvClientColorHelper.color1.drawColor;
+                long color2 = CyvClientColorHelper.color2.drawColor;
+                Font font = mc.font;
+
+                text(context, "Stoptime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, 0, pos.getAbsoluteX() + 1 + font.width("Stoptime: ")
+                        , (int) (pos.getAbsoluteY() + 1), color2);
+            }
+        });
+
+        this.labels.add(new DraggableHUDElement() {
+            public String getName() {return "labelRuntime";}
+            public String getDisplayName() {return "Runtime";}
+            public int getWidth() {return getLabelWidth(getDisplayName());}
+            public int getHeight() {return getLabelHeight();}
+            public boolean enabledByDefault() {return false;}
+            public ScreenPosition getDefaultPosition() {return new ScreenPosition(400, 418);}
+            public void extractRenderState(GuiGraphicsExtractor context, ScreenPosition pos) {
+                if (!this.isVisible) return;
+                long color1 = CyvClientColorHelper.color1.drawColor;
+                long color2 = CyvClientColorHelper.color2.drawColor;
+                Font font = mc.font;
+
+                int runtime = ParkourTickListener.lastRuntime;
+
+                text(context, "Runtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, runtime, pos.getAbsoluteX() + 1 + font.width("Runtime: ")
+                        , (int) (pos.getAbsoluteY() + 1), color2);
+            }
+            public void renderDummy(GuiGraphicsExtractor context, ScreenPosition pos) {
+                long color1 = CyvClientColorHelper.color1.drawColor;
+                long color2 = CyvClientColorHelper.color2.drawColor;
+                Font font = mc.font;
+
+                text(context, "Runtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                text(context, 0, pos.getAbsoluteX() + 1 + font.width("Runtime: ")
+                        , (int) (pos.getAbsoluteY() + 1), color2);
+            }
+        });
     }
 
 }
