@@ -13,12 +13,16 @@ import net.minecraft.client.option.GameOptions;
 import java.text.DecimalFormat;
 
 public class ParkourTickListener {
+    public static boolean jumpTick = false;
     public static int airtime = 0;
+    public static int stopTime = 0;
     public static PosTick lastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
     public static PosTick secondLastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
     public static PosTick thirdLastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
 
     public static int lastAirtime;
+    public static int lastRuntime = -1;
+    public static int lastStopTime = -1;
     public static double x = 0, y = 0, z = 0; //coords
     public static double vx = 0, vy = 0, vz = 0; //velocities
 
@@ -88,9 +92,9 @@ public class ParkourTickListener {
 
         calculateLastTiming();
 
-        if (lastTick == null) {
-        } else {
+        if (lastTick != null) {
             if ((!lastTick.onGround || !mcPlayer.isOnGround()) && !mcPlayer.getAbilities().flying) airtime++;
+            jumpTick = airtime == 1 && mcPlayer.input.playerInput.jump();
 
             x = mcPlayer.getX();
             y = mcPlayer.getY();
@@ -105,10 +109,9 @@ public class ParkourTickListener {
             vp = p - lastTick.p;
 
             checkInertia();
-
         }
 
-        if (airtime == 1) { //jump tick
+        if (jumpTick) {
             if (mcPlayer.getVelocity().y > 0 && vy >= 0) {
                 jx = x;
                 jy = y;
@@ -239,6 +242,16 @@ public class ParkourTickListener {
         }
         else lastAirtime = airtime;
 
+        // stoptime
+        if (lastTick.forward() != 0 || lastTick.strafe() != 0) {
+            if (stopTime != 0) lastStopTime = stopTime;
+            stopTime = 0;
+        } else {
+            lastStopTime = stopTime;
+        }
+
+        if (lastTick.forward() == 0.0f && lastTick.strafe() == 0.0f && stopTime < 999)
+            stopTime++;
     }
 
     private static void checkInertia() {
@@ -450,6 +463,8 @@ public class ParkourTickListener {
         if (lastSidewayMoveTime > 999) lastSidewayMoveTime = 999;
         if (lastMoveTime > 999) lastMoveTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
+        if (lastGroundMoveTime >= 0 && lastTick.onGround)
+            lastRuntime = lastGroundMoveTime;
     }
 
     public static void resetLastTiming() {
@@ -535,7 +550,7 @@ public class ParkourTickListener {
         int forward() {
             int i = 0;
             if (keys[0] == true) i++;
-            if (keys[3] == true) i--;
+            if (keys[2] == true) i--;
             return i;
         }
 
