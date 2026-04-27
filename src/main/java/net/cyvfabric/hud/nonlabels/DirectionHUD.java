@@ -10,6 +10,7 @@ import net.minecraft.client.util.Window;
 
 public class DirectionHUD extends DraggableHUDElement {
     public DirectionHUD() {
+        super("directionHUD", "Direction HUD", true, new ScreenPosition(0, 0));
         this.isDraggable = false;
     }
 
@@ -21,16 +22,6 @@ public class DirectionHUD extends DraggableHUDElement {
         } catch (Exception e) {
             return new ScreenPosition(0, 0);
         }
-    }
-
-    @Override
-    public String getName() {
-        return "directionHUD";
-    }
-
-    @Override
-    public String getDisplayName() {
-        return "Direction HUD";
     }
 
     @Override
