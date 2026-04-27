@@ -8,18 +8,42 @@ import net.minecraft.client.gui.DrawContext;
 import java.util.LinkedHashMap;
 
 public abstract class DraggableHUDElement implements IRenderer {
-    protected final MinecraftClient mc;
+    protected final MinecraftClient mc = MinecraftClient.getInstance();
+
+    private final String name;
+    private final String displayName;
+    private final boolean enabledByDefault;
+    private final ScreenPosition defaultPosition;
 
     public ScreenPosition position;
     public boolean isVisible = true;
     public boolean isDraggable = true;
     public boolean isEnabled = true;
 
-    public DraggableHUDElement() {
-        this.mc = MinecraftClient.getInstance();
+    public DraggableHUDElement(String name, String displayName, boolean enabledByDefault, ScreenPosition defaultPosition) {
+        this.name = name;
+        this.displayName = displayName;
+        this.enabledByDefault = enabledByDefault;
+        this.defaultPosition = defaultPosition;
 
         setEnabled(isEnabled);
-        this.position = this.getDefaultPosition();
+        this.position = defaultPosition;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public boolean enabledByDefault() {
+        return enabledByDefault;
+    }
+
+    public ScreenPosition getDefaultPosition() {
+        return defaultPosition;
     }
 
     public final int getLineOffset(ScreenPosition pos, int lineNum) {
@@ -29,8 +53,6 @@ public abstract class DraggableHUDElement implements IRenderer {
     private int getLineOffset(int lineNum) {
         return (MinecraftClient.getInstance().textRenderer.fontHeight + 3) * lineNum;
     }
-
-    public abstract ScreenPosition getDefaultPosition();
 
     public LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> getConfigFields() {
         LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> fields = new LinkedHashMap<String, CyvClientConfig.ConfigValue<?>>();
@@ -63,9 +85,6 @@ public abstract class DraggableHUDElement implements IRenderer {
         CyvClientConfig.set(this.getName()+"_visible", this.isVisible);
         CyvClientConfig.set(this.getName()+"_posx", this.position.getAbsoluteX());
         CyvClientConfig.set(this.getName()+"_posy", this.position.getAbsoluteY());
-
-        return;
-
     }
 
     public void setEnabled(boolean isEnabled) {
@@ -80,14 +99,6 @@ public abstract class DraggableHUDElement implements IRenderer {
         return position;
     }
 
-    public abstract String getName();
-
-    public abstract String getDisplayName();
-
-    public boolean enabledByDefault() {
-        return true;
-    }
-
     protected void drawString(DrawContext context, Object string, int x, int y, long color) {
         this.drawString(context, string, x, y, color, true);
     }
@@ -96,5 +107,4 @@ public abstract class DraggableHUDElement implements IRenderer {
         long drawColor = (this.isVisible) ? color : 0xFFAAAAAA;
         context.drawText(mc.textRenderer, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
     }
-
 }

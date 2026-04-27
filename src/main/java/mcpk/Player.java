@@ -115,8 +115,8 @@ public class Player {
 			if (sprinting && jumping) {
 				float angle = (float) (facing * 0.017453292F);
 				
-				this.vz += (boost * MathHelper.cos(angle));
-				this.vx -= (boost * MathHelper.sin(angle));
+				this.vz += (boost * MathHelper.mcCos(angle));
+				this.vx -= (boost * MathHelper.mcSin(angle));
 			}
 			
 			if (blocking) {
@@ -145,8 +145,8 @@ public class Player {
 				
 				float angle = (float) (facing * 3.14159265358979323846F / 180F);
 				
-				this.vx += (float) (strafing * MathHelper.cos(angle) - forward * MathHelper.sin(angle));
-				this.vz += (float) (forward * MathHelper.cos(angle) + strafing * MathHelper.sin(angle));
+				this.vx += (float) (strafing * MathHelper.mcCos(angle) - forward * MathHelper.mcSin(angle));
+				this.vz += (float) (forward * MathHelper.mcCos(angle) + strafing * MathHelper.mcSin(angle));
 			}
 			
 			last_slip = slip;
