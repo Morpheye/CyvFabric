@@ -44,7 +44,6 @@ public class HUDManager {
         registeredRenderers.addAll(new LabelBundleTickTimings().labels);
         registeredRenderers.addAll(new LabelBundleTurningAngles().labels);
         registeredRenderers.addAll(new LabelBundleHitExtras().labels);
-
     }
 
     private static void render(DrawContext context, RenderTickCounter partialTicks) {
