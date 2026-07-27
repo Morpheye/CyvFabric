@@ -54,12 +54,12 @@ public class HUDManager {
                     sr.getGuiScaledHeight()/5, 0xFFFF0000, false);
         }
 
-        if (mc.screen == null || mc.screen instanceof ContainerScreen ||
-                mc.screen instanceof ChatScreen || mc.screen instanceof GuiModConfig
-                || mc.screen instanceof GuiMPK) {
+        if (mc.gui.screen() == null || mc.gui.screen() instanceof ContainerScreen ||
+                mc.gui.screen() instanceof ChatScreen || mc.gui.screen() instanceof GuiModConfig
+                || mc.gui.screen() instanceof GuiMPK) {
             for (DraggableHUDElement renderer : registeredRenderers) {
-                if (mc.screen instanceof ContainerScreen && !renderer.renderInGui()) continue;
-                if (mc.screen instanceof ChatScreen && !renderer.renderInChat()) continue;
+                if (mc.gui.screen() instanceof ContainerScreen && !renderer.renderInGui()) continue;
+                if (mc.gui.screen() instanceof ChatScreen && !renderer.renderInChat()) continue;
 
                 if (mc.debugEntries.isOverlayVisible() && !renderer.renderInOverlay()) continue;
 

@@ -16,7 +16,7 @@ public class GuiHandler {
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (Minecraft.getInstance().level == null) return; //don't run unless in-game
             if (screenAwaiting != null) {
-                Minecraft.getInstance().setScreen(screenAwaiting); //set the screen
+                Minecraft.getInstance().gui.setScreen(screenAwaiting); //set the screen
                 screenAwaiting = null; //now that no screen is awaiting, clear it
                 return;
             }
