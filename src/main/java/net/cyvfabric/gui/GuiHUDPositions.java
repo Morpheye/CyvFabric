@@ -74,7 +74,7 @@ public class GuiHUDPositions extends CyvGui {
                 entry.getKey().save(entry.getValue());
             });
 
-            if (fromLabels) Minecraft.getInstance().setScreen(new GuiMPK());
+            if (fromLabels) Minecraft.getInstance().gui.setScreen(new GuiMPK());
             else this.onClose();
             return true;
         } else if (input.codepoint() == GLFW.GLFW_KEY_UP) {

@@ -19,6 +19,6 @@ public class CyvGui extends Screen {
 
     @Override //called upon GUI closing
     public void onClose() {
-        Minecraft.getInstance().setScreen(parent); //sets screen to parent, or closes
+        Minecraft.getInstance().gui.setScreen(parent); //sets screen to parent, or closes
     }
 }

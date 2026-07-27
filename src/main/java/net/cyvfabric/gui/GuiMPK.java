@@ -247,7 +247,7 @@ public class GuiMPK extends CyvGui {
         }
 
         if (this.button.clicked(click)) {
-            mc.setScreen(new GuiHUDPositions(true));
+            mc.gui.setScreen(new GuiHUDPositions(true));
             return true;
         }
 

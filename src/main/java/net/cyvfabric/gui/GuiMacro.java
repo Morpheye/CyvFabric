@@ -304,7 +304,7 @@ public class GuiMacro extends CyvGui {
             } catch (Exception e) {}
         } else if (this.loadFile.clicked(click)) {
             CyvClientConfig.set("currentMacro", this.fileName.getValue());
-            mc.setScreen(new GuiMacro());
+            mc.gui.setScreen(new GuiMacro());
         }
 
         return false;
