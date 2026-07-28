@@ -1,5 +1,6 @@
 package net.cyvfabric.hud.labels;
 
+import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDLabel;
@@ -56,9 +57,10 @@ public class LabelBundleCoordinates extends LabelBundle {
                 "F",
                 true,
                 new ScreenPosition(0, 37),
-                () -> (ParkourTickListener.lastTick == null)
-                        ? 0
-                        : ParkourTickListener.lastTick.f,
+                () -> getLabelAngle(
+                        (ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.lastTick.f,
+                        (mc.player == null) ? 0 : mc.player.getYRot()
+                ),
                 LabelFormat.WRAPPED_ANGLE
         ));
 
@@ -67,10 +69,16 @@ public class LabelBundleCoordinates extends LabelBundle {
                 "Pitch",
                 true,
                 new ScreenPosition(0, 46),
-                () -> (ParkourTickListener.lastTick == null)
-                        ? 0
-                        : ParkourTickListener.lastTick.p,
+                () -> getLabelAngle(
+                        (ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.lastTick.p,
+                        (mc.player == null) ? 0 : mc.player.getXRot()
+                ),
                 LabelFormat.ANGLE
         ));
+    }
+
+    private float getLabelAngle(float tickAngle, float frameAngle) {
+        boolean useFrameBasedAngles = CyvClientConfig.getBoolean("frameBasedAngles", false);
+        return useFrameBasedAngles ? frameAngle : tickAngle;
     }
 }

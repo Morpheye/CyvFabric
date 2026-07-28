@@ -149,6 +149,7 @@ public class GuiModConfig extends CyvGui {
         panels.add(new ConfigPanelToggle(idx++, "highlightLanding", "Highlight Landing Blocks", this));
         panels.add(new ConfigPanelToggle(idx++, "highlightLandingCond", "Highlight Landing Conditions", this));
         panels.add(new ConfigPanelToggle(idx++, "momentumPbCancelling", "Momentum PB Cancelling", this));
+        panels.add(new ConfigPanelToggle(idx++, "frameBasedAngles", "Frame-based Angles", this));
         panels.add(new ConfigPanelEmptySpace(idx++, this));
 
         //inertia
