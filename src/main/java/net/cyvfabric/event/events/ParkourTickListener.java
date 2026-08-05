@@ -92,15 +92,15 @@ public class ParkourTickListener {
 
         calculateLastTiming();
 
+        x = mcPlayer.getX();
+        y = mcPlayer.getY();
+        z = mcPlayer.getZ();
+        f = mcPlayer.getYaw(); //note: actual yaw and pitch are delayed by a tick
+        p = mcPlayer.getPitch();
+
         if (lastTick != null) {
             if ((!lastTick.onGround || !mcPlayer.isOnGround()) && !mcPlayer.getAbilities().flying) airtime++;
             jumpTick = airtime == 1 && mcPlayer.input.jumping;
-
-            x = mcPlayer.getX();
-            y = mcPlayer.getY();
-            z = mcPlayer.getZ();
-            f = mcPlayer.getYaw(); //note: actual yaw and pitch are delayed by a tick
-            p = mcPlayer.getPitch();
 
             vx = x - lastTick.x;
             vy = y - lastTick.y;
