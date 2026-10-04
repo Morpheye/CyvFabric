@@ -28,6 +28,7 @@ public class ParkourTickListener {
 
     public static float f = 0, p = 0; //yaw and pitch
     public static float vf = 0, vp = 0; //last turnings
+    public static int sinIdx = 0, cosIdx = 0; //yaw's sin and cos indices
 
     public static double lx = 0, ly = 0, lz = 0; //landings
     public static double hx = 0, hy = 0, hz = 0; //hits
@@ -92,15 +93,19 @@ public class ParkourTickListener {
 
         calculateLastTiming();
 
+        x = mcPlayer.getX();
+        y = mcPlayer.getY();
+        z = mcPlayer.getZ();
+        f = mcPlayer.getYaw(); //note: actual yaw and pitch are delayed by a tick
+        p = mcPlayer.getPitch();
+
+        double fRad = f * ((float) Math.PI / 180F);
+        sinIdx = (int) (fRad * (float) (65536.0D / (2 * Math.PI))           ) & 65535;
+        cosIdx = (int) (fRad * (float) (65536.0D / (2 * Math.PI)) + 16384.0F) & 65535;
+
         if (lastTick != null) {
             if ((!lastTick.onGround || !mcPlayer.isOnGround()) && !mcPlayer.getAbilities().flying) airtime++;
             jumpTick = airtime == 1 && mcPlayer.input.playerInput.jump();
-
-            x = mcPlayer.getX();
-            y = mcPlayer.getY();
-            z = mcPlayer.getZ();
-            f = mcPlayer.getYaw(); //note: actual yaw and pitch are delayed by a tick
-            p = mcPlayer.getPitch();
 
             vx = x - lastTick.x;
             vy = y - lastTick.y;
