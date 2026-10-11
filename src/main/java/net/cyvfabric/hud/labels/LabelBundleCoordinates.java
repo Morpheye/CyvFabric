@@ -72,5 +72,25 @@ public class LabelBundleCoordinates extends LabelBundle {
                         : ParkourTickListener.lastTick.p,
                 LabelFormat.ANGLE
         ));
+
+
+        // TODO: move these to another label bundle
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelSinIdx",
+                "Sin Index",
+                false,
+                new ScreenPosition(100, 80),
+                () -> ParkourTickListener.sinIdx,
+                LabelFormat.INTEGER
+        ));
+
+        this.labels.add(new DraggableHUDLabel<>(
+                "labelCosIdx",
+                "Cos Index",
+                false,
+                new ScreenPosition(100, 89),
+                () -> ParkourTickListener.cosIdx,
+                LabelFormat.INTEGER
+        ));
     }
 }
