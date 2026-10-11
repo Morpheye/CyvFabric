@@ -1,5 +1,7 @@
 package net.cyvfabric.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.config.CyvClientColorHelper;
@@ -14,8 +16,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.UnknownNullability;
-import org.lwjgl.glfw.GLFW;
-import com.mojang.blaze3d.platform.Window;
+
 import java.util.ArrayList;
 
 public class GuiModConfig extends CyvGui {
@@ -124,42 +125,44 @@ public class GuiModConfig extends CyvGui {
         this.panels.clear();
         this.scroll = 0;
 
-        panels.add(new ConfigPanelOptionSwitcher<String>(0, "color1", "Color 1", CyvClientColorHelper.colorStrings, this) {
+        int idx = 0;
+        panels.add(new ConfigPanelOptionSwitcher<String>(idx++, "color1", "Color 1", CyvClientColorHelper.colorStrings, this) {
             public void onValueChange() {CyvClientColorHelper.setColor1(CyvClientConfig.getString("color1", "aqua"));}});
-        panels.add(new ConfigPanelOptionSwitcher<String>(1, "color2", "Color 2", CyvClientColorHelper.colorStrings, this){
+        panels.add(new ConfigPanelOptionSwitcher<String>(idx++, "color2", "Color 2", CyvClientColorHelper.colorStrings, this){
             public void onValueChange() {CyvClientColorHelper.setColor2(CyvClientConfig.getString("color2", "aqua"));}});
-        panels.add(new ConfigPanelOptionSwitcher<String>(2, "theme", "Color Theme", ColorTheme.getThemes(), this) {
+        panels.add(new ConfigPanelOptionSwitcher<String>(idx++, "theme", "Color Theme", ColorTheme.getThemes(), this) {
             public void onValueChange() {CyvFabric.theme = ColorTheme.valueOf(CyvClientConfig.getString("theme", "CYVISPIRIA"));}
         });
-        panels.add(new ConfigPanelToggle(3, "whiteChat", "Color2 always white in chat", this));
-        panels.add(new ConfigPanelIntegerSlider(4, "df", "Decimal Precision", 1, 16, this) {
+        panels.add(new ConfigPanelToggle(idx++, "whiteChat", "Color2 always white in chat", this));
+        panels.add(new ConfigPanelIntegerSlider(idx++, "df", "Decimal Precision", 1, 16, this) {
             public void onValueChange() {CyvFabric.df.setMaximumFractionDigits(CyvClientConfig.getInt("df", 5));}});
-        panels.add(new ConfigPanelToggle(5, "trimZeroes", "Trim Zeroes", this) {
+        panels.add(new ConfigPanelToggle(idx++, "trimZeroes", "Trim Zeroes", this) {
             public void onValueChange() {
                 if (CyvClientConfig.getBoolean("trimZeroes", true)) CyvFabric.df.setMinimumFractionDigits(0);
                 else CyvFabric.df.setMinimumFractionDigits(CyvClientConfig.getInt("df",5));
         }});
-        panels.add(new ConfigPanelEmptySpace(6, this));
+        panels.add(new ConfigPanelEmptySpace(idx++, this));
 
         //mpk
-        panels.add(new ConfigPanelToggle(7, "showMilliseconds", "Show Millisecond Timings", this));
-        panels.add(new ConfigPanelToggle(8, "sendLbChatOffset", "Send Landing Offset", this));
-        panels.add(new ConfigPanelToggle(9, "sendMmChatOffset", "Send Momentum Offset", this));
-        panels.add(new ConfigPanelToggle(10, "highlightLanding", "Highlight Landing Blocks", this));
-        panels.add(new ConfigPanelToggle(11, "highlightLandingCond", "Highlight Landing Conditions", this));
-        panels.add(new ConfigPanelToggle(12, "momentumPbCancelling", "Momentum PB Cancelling", this));
-        panels.add(new ConfigPanelEmptySpace(13, this));
+        panels.add(new ConfigPanelToggle(idx++, "showMilliseconds", "Show Millisecond Timings", this));
+        panels.add(new ConfigPanelToggle(idx++, "sendLbChatOffset", "Send Landing Offset", this));
+        panels.add(new ConfigPanelToggle(idx++, "sendMmChatOffset", "Send Momentum Offset", this));
+        panels.add(new ConfigPanelToggle(idx++, "highlightLanding", "Highlight Landing Blocks", this));
+        panels.add(new ConfigPanelToggle(idx++, "highlightLandingCond", "Highlight Landing Conditions", this));
+        panels.add(new ConfigPanelToggle(idx++, "momentumPbCancelling", "Momentum PB Cancelling", this));
+        panels.add(new ConfigPanelToggle(idx++, "frameBasedAngles", "Frame-based Angles", this));
+        panels.add(new ConfigPanelEmptySpace(idx++, this));
 
         //inertia
-        panels.add(new ConfigPanelToggle(14, "inertiaEnabled", "Inertia Listener Enabled", this));
-        panels.add(new ConfigPanelIntegerSlider(15, "inertiaTick", "Air tick", 1, 12, this));
-        panels.add(new ConfigPanelDecimalEntry(16, "inertiaMin", "Min Speed", this));
-        panels.add(new ConfigPanelDecimalEntry(17, "inertiaMax", "Max Speed", this));
-        panels.add(new ConfigPanelOptionSwitcher<String>(18, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
+        panels.add(new ConfigPanelToggle(idx++, "inertiaEnabled", "Inertia Listener Enabled", this));
+        panels.add(new ConfigPanelIntegerSlider(idx++, "inertiaTick", "Air tick", 1, 12, this));
+        panels.add(new ConfigPanelDecimalEntry(idx++, "inertiaMin", "Min Speed", this));
+        panels.add(new ConfigPanelDecimalEntry(idx++, "inertiaMax", "Max Speed", this));
+        panels.add(new ConfigPanelOptionSwitcher<String>(idx++, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
 
         //macro
-        panels.add(new ConfigPanelEmptySpace(19, this));
-        panels.add(new ConfigPanelToggle(20, "smoothMacro", "Smooth Macro", this));
+        panels.add(new ConfigPanelEmptySpace(idx++, this));
+        panels.add(new ConfigPanelToggle(idx++, "smoothMacro", "Smooth Macro", this));
 
         maxScroll = (int) Math.max(0, Minecraft.getInstance().font.lineHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
@@ -256,7 +259,7 @@ public class GuiModConfig extends CyvGui {
 
     @Override
     public boolean charTyped(CharacterEvent input) {
-        if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
+        if (input.codepoint() == InputConstants.KEY_ESCAPE) { //exit the gui
             this.onClose();
             return true;
         }
@@ -271,7 +274,7 @@ public class GuiModConfig extends CyvGui {
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        if (input.input() == GLFW.GLFW_KEY_ESCAPE) {
+        if (input.input() == InputConstants.KEY_ESCAPE) {
             if (this.selectedPanel != null) {
                 this.selectedPanel.unselect();
                 this.selectedPanel = null;

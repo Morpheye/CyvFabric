@@ -1,5 +1,7 @@
 package net.cyvfabric.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import mcpk.Parser;
 import mcpk.Player;
 import net.cyvfabric.CyvFabric;
@@ -14,8 +16,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.UnknownNullability;
-import org.lwjgl.glfw.GLFW;
-import com.mojang.blaze3d.platform.Window;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -73,7 +74,7 @@ public class GuiSimulate extends CyvGui {
 
     @Override
     public boolean keyPressed(KeyEvent keyInput) {
-        if (keyInput.input() == GLFW.GLFW_KEY_ENTER) {
+        if (keyInput.input() == InputConstants.KEY_RETURN) {
             this.onClose(); //close the gui
             String text = this.input.getValue(); //parser shit
 
@@ -91,14 +92,14 @@ public class GuiSimulate extends CyvGui {
                 return true;
             }
             return true;
-        } else if (keyInput.input() == GLFW.GLFW_KEY_UP) { //scroll up
+        } else if (keyInput.input() == InputConstants.KEY_UP) { //scroll up
             if (chatHistoryIndex < chatHistory.size()) {
                 chatHistoryIndex++;
                 this.input.setValue(chatHistory.get(chatHistory.size()-chatHistoryIndex));
                 return true;
             }
 
-        } else if (keyInput.input() == GLFW.GLFW_KEY_DOWN) { //scroll down
+        } else if (keyInput.input() == InputConstants.KEY_DOWN) { //scroll down
             if (chatHistoryIndex > 0) {
                 chatHistoryIndex--;
                 if (chatHistoryIndex == 0) {

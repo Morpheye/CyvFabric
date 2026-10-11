@@ -1,13 +1,13 @@
 package net.cyvfabric.keybinding;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvKeybinding;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindingMPKGui extends CyvKeybinding {
     public KeybindingMPKGui() {
-        super("key.cyvfabric.openmpkgui", GLFW.GLFW_KEY_P);
+        super("key.cyvfabric.openmpkgui", InputConstants.KEY_P);
     }
 
     @Override

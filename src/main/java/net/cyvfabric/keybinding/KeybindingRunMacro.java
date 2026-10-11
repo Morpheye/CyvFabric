@@ -1,14 +1,12 @@
 package net.cyvfabric.keybinding;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.cyvfabric.command.mpk.CommandMacro;
-import net.cyvfabric.event.events.GuiHandler;
-import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvKeybinding;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindingRunMacro extends CyvKeybinding {
     public KeybindingRunMacro() {
-        super("key.cyvfabric.runmacro", GLFW.GLFW_KEY_V);
+        super("key.cyvfabric.runmacro", InputConstants.KEY_V);
     }
 
     @Override

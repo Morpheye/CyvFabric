@@ -1,5 +1,7 @@
 package net.cyvfabric.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.event.ConfigLoader;
@@ -15,8 +17,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.UnknownNullability;
-import org.lwjgl.glfw.GLFW;
-import com.mojang.blaze3d.platform.Window;
+
 import java.util.ArrayList;
 
 public class GuiMPK extends CyvGui {
@@ -86,7 +87,7 @@ public class GuiMPK extends CyvGui {
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        if (input.input() == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
+        if (input.input() == InputConstants.KEY_ESCAPE) { //exit the gui
             if (this.searchBar.isFocused()) {
                 this.searchBar.setFocused(false);
                 this.searchBar.setValue("");

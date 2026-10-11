@@ -1,12 +1,12 @@
 package net.cyvfabric.keybinding;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.cyvfabric.command.mpk.CommandMacro;
 import net.cyvfabric.util.CyvKeybinding;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindingStopMacro extends CyvKeybinding {
     public KeybindingStopMacro() {
-        super("key.cyvfabric.stopmacro", GLFW.GLFW_KEY_UNKNOWN);
+        super("key.cyvfabric.stopmacro", InputConstants.UNKNOWN.getValue());
     }
 
     @Override

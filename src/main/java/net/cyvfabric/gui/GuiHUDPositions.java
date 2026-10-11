@@ -1,5 +1,7 @@
 package net.cyvfabric.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.hud.HUDManager;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
@@ -12,8 +14,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.UnknownNullability;
-import org.lwjgl.glfw.GLFW;
-import com.mojang.blaze3d.platform.Window;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public class GuiHUDPositions extends CyvGui {
 
     @Override
     public boolean charTyped(CharacterEvent input) {
-        if (input.codepoint() == GLFW.GLFW_KEY_ESCAPE) {
+        if (input.codepoint() == InputConstants.KEY_ESCAPE) {
             renderers.entrySet().forEach((entry) -> {
                 entry.getKey().save(entry.getValue());
             });
@@ -77,28 +78,28 @@ public class GuiHUDPositions extends CyvGui {
             if (fromLabels) Minecraft.getInstance().gui.setScreen(new GuiMPK());
             else this.onClose();
             return true;
-        } else if (input.codepoint() == GLFW.GLFW_KEY_UP) {
+        } else if (input.codepoint() == InputConstants.KEY_UP) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(0,-1);
                     return true;
                 }
             }
-        } else if (input.codepoint() == GLFW.GLFW_KEY_LEFT) {
+        } else if (input.codepoint() == InputConstants.KEY_LEFT) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(-1,0);
                     return true;
                 }
             }
-        } else if (input.codepoint() == GLFW.GLFW_KEY_DOWN) {
+        } else if (input.codepoint() == InputConstants.KEY_DOWN) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(0,1);
                     return true;
                 }
             }
-        } else if (input.codepoint() == GLFW.GLFW_KEY_RIGHT) {
+        } else if (input.codepoint() == InputConstants.KEY_RIGHT) {
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     moveSelectedRenderBy(1,0);

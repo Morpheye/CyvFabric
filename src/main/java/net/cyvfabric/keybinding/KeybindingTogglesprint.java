@@ -1,12 +1,12 @@
 package net.cyvfabric.keybinding;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.cyvfabric.util.CyvKeybinding;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindingTogglesprint extends CyvKeybinding {
     public KeybindingTogglesprint() {
-        super("key.cyvfabric.togglesprint", GLFW.GLFW_KEY_UNKNOWN);
+        super("key.cyvfabric.togglesprint", InputConstants.UNKNOWN.getValue());
     }
 
     public static boolean sprintToggled = false;

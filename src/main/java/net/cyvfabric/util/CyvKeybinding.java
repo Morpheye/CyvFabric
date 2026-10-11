@@ -12,7 +12,7 @@ public class CyvKeybinding extends KeyMapping {
     public static final KeyMapping.Category KEY_CATEGORY_CYVFABRIC = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(CyvFabric.MOD_ID, "cyv_keys")); //cyvfabric keybinding category
 
     public CyvKeybinding(String name, int glfw_key) {
-        super(name, InputConstants.Type.KEYSYM, glfw_key, KEY_CATEGORY_CYVFABRIC);
+        super(name, InputConstants.Type.KEYBOARD, glfw_key, KEY_CATEGORY_CYVFABRIC);
     }
 
     /**Called on start of tick*/
