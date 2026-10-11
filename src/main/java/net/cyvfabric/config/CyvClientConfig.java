@@ -30,6 +30,8 @@ public class CyvClientConfig {
         configFields.put("highlightLandingCond", new ConfigValue<Boolean>(false));
         configFields.put("momentumPbCancelling", new ConfigValue<Boolean>(false));
 
+        configFields.put("frameBasedAngles", new ConfigValue<Boolean>(false));
+
         //inertia listener
         configFields.put("inertiaEnabled", new ConfigValue<Boolean>(false));
         configFields.put("inertiaTick", new ConfigValue<Integer>(4));
