@@ -13,11 +13,12 @@ import java.text.DecimalFormat;
 
 public class ParkourTickListener {
     public static boolean jumpTick = false;
+    public static boolean moving = false;
     public static int airtime = 0;
     public static int stopTime = 0;
-    public static PosTick lastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
-    public static PosTick secondLastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
-    public static PosTick thirdLastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false});
+    public static PosTick lastTick = new PosTick(0, 0, 0, 0, new boolean[] {false, false, false, false, false, false, false}, false);
+    public static PosTick secondLastTick = lastTick;
+    public static PosTick thirdLastTick = secondLastTick;
 
     public static int lastAirtime;
     public static int lastRuntime = -1;
@@ -238,7 +239,7 @@ public class ParkourTickListener {
 
         thirdLastTick = secondLastTick;
         secondLastTick = lastTick;
-        lastTick = new PosTick(mcPlayer, vx, vy, vz, airtime, keys);
+        lastTick = new PosTick(mcPlayer, vx, vy, vz, airtime, keys, moving);
         lastTick.true_vx = mcPlayer.getDeltaMovement().x();
         lastTick.true_vy = mcPlayer.getDeltaMovement().y();
         lastTick.true_vz = mcPlayer.getDeltaMovement().z();
@@ -248,6 +249,18 @@ public class ParkourTickListener {
             airtime = 0;
         }
         else lastAirtime = airtime;
+
+        // runtime
+        if (secondLastTick.onGround) {
+            if (lastTick.moving) {
+                if (secondLastTick.moving)
+                    lastRuntime++;
+                if (!thirdLastTick.onGround || !secondLastTick.moving)
+                    lastRuntime = 0;
+            } else if (thirdLastTick.onGround && secondLastTick.moving) {
+                lastRuntime++;
+            }
+        }
 
         // stoptime
         if (lastTick.forward() != 0 || lastTick.strafe() != 0) {
@@ -308,7 +321,7 @@ public class ParkourTickListener {
 
         boolean movingWS = gameSettings.keyUp.isDown() ^ gameSettings.keyDown.isDown();
         boolean movingAD = gameSettings.keyLeft.isDown() ^ gameSettings.keyRight.isDown();
-        boolean moving = movingWS || movingAD;
+        moving = movingWS || movingAD;
 
         if (movingAD && !movingWS)
             lastSidewayMoveTime++;
@@ -472,8 +485,6 @@ public class ParkourTickListener {
         if (lastSidewayMoveTime > 999) lastSidewayMoveTime = 999;
         if (lastMoveTime > 999) lastMoveTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
-        if (lastGroundMoveTime >= 0 && lastTick.onGround)
-            lastRuntime = lastGroundMoveTime;
     }
 
     public static void resetLastTiming() {
@@ -485,37 +496,32 @@ public class ParkourTickListener {
 
     public static class PosTick {
 
-        public PosTick(LocalPlayer player, double vx, double vy, double vz, int airtime, boolean[] keys) {
-
-            this.x = player.getX();
-            this.y = player.getY();
-            this.z = player.getZ();
-            this.f = player.getYRot();
-            this.p = player.getXRot();
-            this.vx = vx;
-            this.vy = vy;
-            this.vz = vz;
-            this.onGround = player.onGround();
-            this.airtime = airtime;
-            this.keys = keys;
+        public PosTick(LocalPlayer player, double vx, double vy, double vz, int airtime, boolean[] keys, boolean moving) {
+            this(
+                player.getX(), player.getY(), player.getZ(),
+                player.getYRot(), player.getXRot(),
+                vx, vy, vz,
+                player.onGround(),
+                airtime,
+                keys,
+                moving
+            );
         }
 
-        public PosTick(double x, double y, double z, int airtime, boolean[] keys) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.f = 0;
-            this.p = 0;
-            this.vx = 0;
-            this.vy = 0;
-            this.vz = 0;
-            this.onGround = true;
-            this.airtime = airtime;
-            this.keys = keys;
+        public PosTick(double x, double y, double z, int airtime, boolean[] keys, boolean moving) {
+            this(
+                x, y, z,
+                0, 0,
+                0, 0, 0,
+                true,
+                airtime,
+                keys,
+                moving
+            );
         }
 
         public PosTick(double x, double y, double z, float yaw, float pitch, double motionX, double motionY,
-                       double motionZ, boolean onGround, int airtime, boolean[] keys) {
+                       double motionZ, boolean onGround, int airtime, boolean[] keys, boolean moving) {
             this.x = x;
             this.y = y;
             this.z = z;
@@ -527,6 +533,7 @@ public class ParkourTickListener {
             this.onGround = onGround;
             this.airtime = airtime;
             this.keys = keys;
+            this.moving = moving;
         }
 
 
@@ -543,6 +550,8 @@ public class ParkourTickListener {
         public double vz;
 
         public double true_vx, true_vy, true_vz;
+
+        public boolean moving;
 
         public boolean onGround;
         public int airtime;
