@@ -562,7 +562,7 @@ public class GuiMacro extends CyvGui {
 
         boolean clicked(MouseButtonEvent click) {
             if (!this.enabled) return false;
-            return click.x() > x && click.x() < x + sizeX && click.y() > y && click.y() < y + sizeY && click.button() == 0;
+            return click.x() > x && click.x() < x + sizeX && click.y() > y && click.y() < y + sizeY && click.button() == 1;
         }
     }
 }

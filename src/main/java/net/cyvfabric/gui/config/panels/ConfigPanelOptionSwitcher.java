@@ -78,8 +78,8 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
 
     @Override
     public void mouseClicked(MouseButtonEvent click, boolean doubled) {
-        if (click.button() == 0) this.sliderValue++;
-        else if (click.button() == 1) this.sliderValue--;
+        if (click.button() == 1) this.sliderValue++;
+        else if (click.button() == 3) this.sliderValue--;
         if (this.sliderValue >= this.sliderValues.length) this.sliderValue = 0;
         if (this.sliderValue < 0) this.sliderValue = this.sliderValues.length-1;
 

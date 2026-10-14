@@ -365,7 +365,7 @@ public class GuiMPK extends CyvGui {
         }
 
         boolean clicked(MouseButtonEvent click) {
-            if (!(click.x() > x && click.x() < x+sizeX && click.y() > y && click.y() < y+sizeY && click.button() == 0)) return false;
+            if (!(click.x() > x && click.x() < x+sizeX && click.y() > y && click.y() < y+sizeY && click.button() == 1)) return false;
             else return true;
         }
     }

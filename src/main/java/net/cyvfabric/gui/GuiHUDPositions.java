@@ -113,7 +113,7 @@ public class GuiHUDPositions extends CyvGui {
 
     @Override
     public boolean mouseDragged(MouseButtonEvent click, double offsetX, double offsetY) {
-        if (click.button() == 0) { //left-clicked
+        if (click.button() == 1) { //left-clicked
             if (selectedRenderer.isPresent()) {
                 if (selectedRenderer.get().isDraggable) {
                     prevX += offsetX;
@@ -136,7 +136,7 @@ public class GuiHUDPositions extends CyvGui {
 
         loadMouseOver((int) click.x(), (int) click.y());
 
-        if (click.button() == 1) { //right-clicked
+        if (click.button() == 3) { //right-clicked
             if (!this.selectedRenderer.isPresent()) return false;
             DraggableHUDElement modRender = this.selectedRenderer.get();
             modRender.isVisible = !modRender.isVisible;
